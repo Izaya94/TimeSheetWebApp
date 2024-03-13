@@ -1,12 +1,11 @@
 <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <!-- <img src="assets\demo\images\login\login-bg.png"  alt="image" class="login__bg"> -->
     <div class="flex flex-column align-items-center justify-content-center">
         <img src="assets/layout/images/{{layoutService.config().colorScheme === 'light' ? 'logo-dark' : 'logo-white'}}.svg" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0">                
         <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
             <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
                 <div class="text-center mb-5">
-                    <img src="assets/demo/images/login/avatar.png" alt="Image" height="50" class="mb-3">
-                    <div class="text-900 text-3xl font-medium mb-3">Welcome, Isabel!</div>
-                    <span class="text-600 font-medium">Sign in to continue</span>
+                    <span class="text-800 font-medium">Sign in to continue</span>
                 </div>
 
                 <div>
@@ -29,3 +28,39 @@
         </div>
     </div>
 </div>
+
+<!-- 
+<div class="login">
+    <img src="assets\demo\images\login\login-bg.png" alt="image" class="login__bg">
+
+    <form action="" class="login__form">
+       <h1 class="login__title">Login</h1>
+
+       <div class="login__inputs">
+          <div class="login__box">
+             <input type="email" placeholder="Email ID" required class="login__input">
+             <i class="ri-mail-fill"></i>
+          </div>
+
+          <div class="login__box">
+             <input type="password" placeholder="Password" required class="login__input">
+             <i class="ri-lock-2-fill"></i>
+          </div>
+       </div>
+
+       <div class="login__check">
+          <div class="login__check-box">
+             <input type="checkbox" class="login__check-input" id="user-check">
+             <label for="user-check" class="login__check-label">Remember me</label>
+          </div>
+
+          <a href="#" class="login__forgot">Forgot Password?</a>
+       </div>
+
+       <button type="submit" class="login__button">Login</button>
+
+       <div class="login__register">
+          Don't have an account? <a href="#">Register</a>
+       </div>
+    </form>
+ </div> -->

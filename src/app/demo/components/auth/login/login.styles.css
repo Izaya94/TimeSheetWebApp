@@ -1,0 +1,11 @@
+
+.surface-ground {
+    background-image: url('src/assets/demo/images/login/login-bg.png'); /* Add your background image path here */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
