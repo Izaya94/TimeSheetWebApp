@@ -13,10 +13,15 @@ import { NodeService } from './demo/service/node.service';
 import { PhotoService } from './demo/service/photo.service';
 import { RouterOutlet } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { UserLoginComponent } from "./user-login/user-login.component";
+import { NavbarComponent } from "./navbar/navbar.component";
 
 @NgModule({
-    declarations: [AppComponent, NotfoundComponent],
-    imports: [AppRoutingModule, AppLayoutModule, CommonModule, RouterOutlet, HttpClientModule],
+    declarations: [
+        AppComponent,
+        NotfoundComponent
+    ],
     providers: [
         { provide: LocationStrategy, useClass: PathLocationStrategy },
         CountryService,
@@ -28,5 +33,15 @@ import { HttpClientModule } from '@angular/common/http';
         ProductService,
     ],
     bootstrap: [AppComponent],
+    imports: [
+        AppRoutingModule,
+        AppLayoutModule,
+        CommonModule,
+        RouterOutlet,
+        HttpClientModule,
+        ReactiveFormsModule,
+        UserLoginComponent,
+        NavbarComponent
+    ]
 })
 export class AppModule {}

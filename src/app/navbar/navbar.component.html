@@ -1,0 +1,38 @@
+<div class="layout-topbar"  [ngStyle]="{backgroundColor:'var(--indigo-900)', color: 'var(--primary-color-text)', borderRadius: 'var(--border)', padding: '3rem'}">
+    <a class="layout-topbar-logo">
+        <img src="assets/layout/images/{{layoutService.config().colorScheme === 'light' ? 'logo-dark' : 'logo-white'}}.svg" alt="logo">
+        <span>TimeSheet Anaylzer</span>
+        <p></p>
+    </a>
+<!-- 
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()" title="Dashboard">
+        <i class="pi pi-bars"></i>
+    </button> -->
+
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button"  title="Home" [routerLink]="'/'">
+        <i class="pi pi-home"></i>
+    </button>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button"  title="Sign In" [routerLink]="'/auth/login'">
+        <i class="pi pi-sign-in"></i>
+    </button>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button" title="Settings">
+        <i class="pi pi-cog"></i>
+        <span>Settings</span>
+    </button>
+
+
+    <!-- <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+        <button class="p-link layout-topbar-button" title="Calendar">
+            <i class="pi pi-calendar"></i>
+            <span>Calendar</span>
+        </button>
+        <button class="p-link layout-topbar-button" title="Profile">
+            <i class="pi pi-user"></i>
+            <span>Profile</span>
+        </button>
+    </div> -->
+
+</div>
