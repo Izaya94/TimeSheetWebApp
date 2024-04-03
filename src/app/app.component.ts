@@ -1,31 +1,13 @@
-import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html'
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
-
-    title = 'TestTime';
-    httpClient = inject(HttpClient);
-    products:any = [];
-    fetchProducts(): void {
-        this.httpClient.get("http://localhost:5055/Products").subscribe((data:any)=>{
-            this.products = data;
-            console.log(this.products);            
-        });
-        
-    }
-
-    constructor(private primengConfig: PrimeNGConfig) { }
-
-    
-    ngOnInit():void{
-        this.primengConfig.ripple = true;
-        this.fetchProducts();
-    }
+export class AppComponent {
+  title = 'TimeSheetWebApp';
 }
