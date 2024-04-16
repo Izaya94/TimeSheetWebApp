@@ -23,16 +23,17 @@ export class LoginComponent implements OnInit {
   fb = inject(FormBuilder);
 
   login(){
+    // this.authService.login(this.form.value).subscribe((response) => {console.log(response);}); 
     this.authService.login(this.form.value).subscribe({
       next:(response) => {
-        this.matSnackBar.open(response.Message, 'Close',{
+        this.matSnackBar.open(response.message, 'Close',{
           duration:5000,
           horizontalPosition: 'center',
         });
         this.router.navigate(['/']);
       },
       error: (error) => {
-        this.matSnackBar.open(error.error.Message, 'Close', {
+        this.matSnackBar.open(error.error.message, 'Close', {
           duration:5000,
           horizontalPosition: 'center',
         });

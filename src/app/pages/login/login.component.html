@@ -15,17 +15,16 @@
             <mat-icon matPrefix>email</mat-icon>
         </mat-form-field>
 
-        <mat-form-field appearance="fill" class="w-full">
+        <mat-form-field appearance="fill" class="w-full"> 
             <mat-label>Password</mat-label>
             <input matInput type="{{ hide  ? 'password' : 'text'}}" placeholder="Password" formControlName="password">
             <mat-icon matPrefix>lock</mat-icon>
             <mat-icon (click)="hide = !hide" matSuffix> {{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
         </mat-form-field>
 
-        <button type="button" 
+        <button type="submit" 
                 class="w-full border text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium px-12 py-3.5 text-center me-2 mb-2"
                 [disabled]="!form.valid"
-                (click)="login()"
                 >
             Login
         </button>

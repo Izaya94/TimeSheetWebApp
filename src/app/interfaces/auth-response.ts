@@ -1,5 +1,5 @@
 export interface AuthResponse {
-    "Flag": boolean,
-    "Token": string,
-    "Message": string
+    "flag": boolean,
+    "token": string,
+    "message": string
 }
