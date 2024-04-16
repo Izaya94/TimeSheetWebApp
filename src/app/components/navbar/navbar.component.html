@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
     <mat-toolbar color="primary" style="padding:30px 50px;">
         <button mat-icon-button>
             <mat-icon>menu</mat-icon>
@@ -10,16 +10,18 @@
             <div *ngIf="authService.getUserDetail() as userDetail">
                 <div class="flex gap-5 items-center">
                     <a [matMenuTriggerFor]="menu" class="flex gap2 cursor-pointer items-center">
+                        <button pButton pRipple type="button" icon="pi pi-user" class="p-button-rounded p-button-info"></button>
                         <div class="bg-red-400 text-white font-bold shadow-md rounded-full w-5 h-5 p-5 flex justify-center items-center">
                             {{userDetail?.fullName[0]}}
                         </div>
                         <div class="text-white flex flex-col">
                             <h1 class="p-0 m=0 font-medium">
-                                {{userDetail?.fullName}}
+                                <span>{{userDetail?.fullName}}</span>
                             </h1>
-                            <p class="p-0 m=0 font-medium">
-                                {{userDetail?.roles}}
-                            </p>
+                            <button class="p-link layout-topbar-button">
+                                <i class="pi pi-cog"></i>
+                                <span>{{userDetail?.roles}}</span>
+                            </button>
                         </div>
                     </a>
                     <mat-menu #menu="matMenu">
@@ -63,4 +65,34 @@
         
         
     </mat-toolbar>
+</div> -->
+
+
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="/">
+        <span>Home</span>
+    </a>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button">
+        <i class="pi pi-bars"></i>
+    </button>
+
+    <button #topbarmenubutton class="p-link layout-topbar-menu-button layout-topbar-button">
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div #topbarmenu class="layout-topbar-menu">
+        <button class="p-link layout-topbar-button">
+            <i class="pi pi-calendar"></i>
+            <span>Calendar</span>
+        </button>
+        <button class="p-link layout-topbar-button">
+            <i class="pi pi-user"></i>
+            <span>Profile</span>
+        </button>
+        <button class="p-link layout-topbar-button">
+            <i class="pi pi-cog"></i>
+            <span>Settings</span>
+        </button>
+    </div>
 </div>

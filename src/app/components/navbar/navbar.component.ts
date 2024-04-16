@@ -6,6 +6,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatMenuModule } from '@angular/material/menu'
 import { CommonModule } from '@angular/common';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-navbar',

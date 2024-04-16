@@ -22,12 +22,11 @@
             <mat-icon (click)="hide = !hide" matSuffix> {{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
         </mat-form-field>
 
-        <button type="submit" 
+        <p-button label="Login"
                 class="w-full border text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium px-12 py-3.5 text-center me-2 mb-2"
                 [disabled]="!form.valid"
                 >
-            Login
-        </button>
+        </p-button>
         <!-- <button type="button" class="w-full border border-slate-200 disabled:bg-purple-400 py-2 px-3 bg-purple-700 text-white font-bold">
             Login
         </button> -->
@@ -37,4 +36,7 @@
         <a class="text-purple-700" [routerLink]="['/help']">Contact for help with login</a>
         
     </form>
+
+    
+    
 </div>
