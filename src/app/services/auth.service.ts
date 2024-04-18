@@ -31,7 +31,6 @@ export class AuthService {
   getUserDetail = () => {
     const token = this.getToken();
     if(!token) return null;
-    debugger;
     const decodedToken:any = jwtDecode(token);
     const userDetail = {
       id: decodedToken.nameid,

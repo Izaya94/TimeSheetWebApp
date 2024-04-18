@@ -20,12 +20,12 @@ export class LoginComponent implements OnInit {
   matSnackBar = inject(MatSnackBar);
   router = inject(Router);
   hide = true;
-  form!: FormGroup;
+  loginForm!: FormGroup;
   fb = inject(FormBuilder);
 
   login(){
     // this.authService.login(this.form.value).subscribe((response) => {console.log(response);}); 
-    this.authService.login(this.form.value).subscribe({
+    this.authService.login(this.loginForm.value).subscribe({
       next:(response) => {
         this.matSnackBar.open(response.message, 'Close',{
           duration:5000,
@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit():void{
-    this.form = this.fb.group({
+    this.loginForm = this.fb.group({
       email:['', [Validators.required, Validators.email]],
       password:['',Validators.required],
     }) 
