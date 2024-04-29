@@ -8,15 +8,15 @@
 		</div>
 		<div class="flex flex-col">
 		  <label for="birthdate" class="mb-1">Birth Date</label>
-		  <input id="birthdate" type="date" class="p-inputtext w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" formControlName="birthdate">
+		  <input id="birthdate" type="date" class="p-inputtext w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" formControlName="birthDate">
 		</div>
 		<div class="flex flex-col">
 		  <label for="mobilenumber" class="mb-1">Mobile Number</label>
-		  <input id="mobilenumber" type="tel" class="p-inputtext w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" formControlName="mobilenumber">
+		  <input id="mobilenumber" type="tel" class="p-inputtext w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" formControlName="contactNumber">
 		</div>
 		<div class="flex flex-col">
 		  <label for="homenumber" class="mb-1">Home Number</label>
-		  <input id="homenumber" type="tel" class="p-inputtext w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" formControlName="homenumber">
+		  <input id="homenumber" type="tel" class="p-inputtext w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" formControlName="homeNumber">
 		</div>
 		<div class="flex flex-col">
 		  <label for="email" class="mb-1">Email</label>
@@ -24,15 +24,16 @@
 		</div>
 		<div class="flex flex-col">
 		  <label for="joindate" class="mb-1">Join Date</label>
-		  <input id="joindate" type="text" class="p-inputtext w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" formControlName="joindate">
+		  <input id="joindate" type="text" class="p-inputtext w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" formControlName="joinDate">
 		</div>
-		<div class="flex flex-col">
-			<label for="designationid" class="mb-1">Designation</label>
-			<p-dropdown id="designationid" formControlName="designation" [style]="{'width': '100%'}"></p-dropdown>
-		  </div>
+		<!-- <div class="flex flex-col" *ngIf="roles$">
+			<label for="roles" class="mb-1">Roles</label>
+			<p-dropdown formControlName="roles" [style]="{'width': '100%'}" [options]="roles$" optionLabel="name">
+		</p-dropdown>
+		  </div> -->
 	  </div><br>
 	  <div class="flex items-center mb-4">
-		<label for="makeuser" class="mb-1">Make user</label>
+		<label for="makeuser" class="mb-1">Create User Account?</label>
 		<input id="makeuser" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
 	</div>
 	  <button type="submit" class="p-button p-button-primary mt-4">Register</button>

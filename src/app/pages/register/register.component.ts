@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from "primeng/autocomplete";
 import { CalendarModule } from "primeng/calendar";
@@ -13,6 +13,9 @@ import { InputTextareaModule } from "primeng/inputtextarea";
 import { InputTextModule } from "primeng/inputtext";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { RoleService } from '../../services/role.service';
+import { Observable, map } from 'rxjs';
+import { IRole } from '../../interfaces/role';
 
 @Component({
   selector: 'app-register',
@@ -31,13 +34,20 @@ import { Router } from '@angular/router';
 		InputTextareaModule,
 		InputTextModule,
 		FormsModule,
-		ReactiveFormsModule
+		ReactiveFormsModule,
+		AsyncPipe,
+		CommonModule,
+		DropdownModule
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit{
 
+
+	constructor(private roleService: RoleService){}
+
+	roles$!:Observable<IRole[]> | null;
 	fb = inject(FormBuilder);
 	registerForm!: FormGroup;
 	router = inject(Router);
@@ -50,15 +60,14 @@ export class RegisterComponent implements OnInit{
 			homeNumber:[''],
 			email:['', [Validators.required, Validators.email]],
 			joinDate: ['', [Validators.required]],
-			designation: ['', [Validators.required]],
+			roles: ['', [Validators.required]],
 		});
+
+		this.roles$ = this.roleService.getroles();
 	}
 
 	register(){
-		
+		// this.roleService.getroles(this.registerForm.value).subscribe((response) => {console.log(response);}); 
 	}
-
-
-	
 
 }
