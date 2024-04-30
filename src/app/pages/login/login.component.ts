@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   fb = inject(FormBuilder);
 
   login(){
-    // this.authService.login(this.form.value).subscribe((response) => {console.log(response);}); 
+    // this.authService.login(this.loginForm.value).subscribe((response) => {console.log(response);}); 
     this.authService.login(this.loginForm.value).subscribe({
       next:(response) => {
         this.matSnackBar.open(response.message, 'Close',{

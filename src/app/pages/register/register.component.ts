@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit{
 
 	constructor(private roleService: RoleService){}
 
-	roles$!:Observable<IRole[]> | null;
+	roles$!:IRole[] | null;
 	fb = inject(FormBuilder);
 	registerForm!: FormGroup;
 	router = inject(Router);
@@ -63,11 +63,25 @@ export class RegisterComponent implements OnInit{
 			roles: ['', [Validators.required]],
 		});
 
-		this.roles$ = this.roleService.getroles();
+		this.register();
+		// this.roles$ = this.roleService.getroles();
 	}
 
 	register(){
-		// this.roleService.getroles(this.registerForm.value).subscribe((response) => {console.log(response);}); 
+		this.roleService.getroles().subscribe((response) => {
+			console.log(response);
+			if(response.dataUpdateResponse.status){
+				this.onDataGet(response.roleResponseList);
+			}
+		}
+	); 
+	}
+	onDataGet(roleResponseList: IRole[]) {
+		this.roles$=roleResponseList;
+	}
+
+	onSubmit(){
+		console.log(this.registerForm.value);
 	}
 
 }
