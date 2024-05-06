@@ -22,12 +22,19 @@
             <mat-icon (click)="hide = !hide" matSuffix> {{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
         </mat-form-field>
 
-        <button label="Login"
-                class="w-full border  border border-slate-200 disabled:bg-purple-400 py-2 px-3 bg-purple-700 text-white font-bold"
+
+        <p-toast position="bottom-center" key="bc"></p-toast>
+        <button 
+                type="submit"
+                pButton pRipple
+                label="Login"
+                class="p-button-success"
                 [disabled]="!loginForm.valid"
+                size="large"
+                (click)="login()"
                 >
-                Login
         </button>
+        
         <div>
         <a class="text-purple-700" [routerLink]="['/help']">Contact for help with login</a>
     </div>
