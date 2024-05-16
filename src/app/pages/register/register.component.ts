@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { RoleService } from '../../services/role.service';
 import { Observable, map } from 'rxjs';
 import { IRole } from '../../interfaces/role';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -45,7 +46,7 @@ import { IRole } from '../../interfaces/role';
 export class RegisterComponent implements OnInit{
 
 
-	constructor(private roleService: RoleService){}
+	constructor(private roleService: RoleService, private authService: AuthService){}
 
 	roles$!:IRole[] | null;
 	fb = inject(FormBuilder);
@@ -67,6 +68,12 @@ export class RegisterComponent implements OnInit{
 		// this.roles$ = this.roleService.getroles();
 	}
 
+	// register(){
+	// 	this.authService.register(this.registerForm.value).subscribe({
+	// 		next:(response) =>
+	// 	})
+	// }
+
 	register(){
 		this.roleService.getroles().subscribe((response) => {
 			console.log(response);
@@ -76,6 +83,7 @@ export class RegisterComponent implements OnInit{
 		}
 	); 
 	}
+
 	onDataGet(roleResponseList: IRole[]) {
 		this.roles$=roleResponseList;
 	}
@@ -85,3 +93,5 @@ export class RegisterComponent implements OnInit{
 	}
 
 }
+
+

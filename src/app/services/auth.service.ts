@@ -5,6 +5,7 @@ import { Observable, map } from 'rxjs';
 import { AuthResponse } from '../interfaces/auth-response';
 import { HttpClient } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
+import { IEmployeeDTOAdd } from '../interfaces/employee-create-request';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +27,11 @@ export class AuthService {
           return response;
         })
       );
+  }
+
+  register(data: IEmployeeDTOAdd): Observable<AuthResponse>{
+    return this.http
+    .post<AuthResponse>(`${this.apiUrl}Employee/add`, data);
   }
 
   getUserDetail = () => {

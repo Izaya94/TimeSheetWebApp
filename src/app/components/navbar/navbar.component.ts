@@ -8,20 +8,25 @@ import { MatMenuModule } from '@angular/material/menu'
 import { CommonModule } from '@angular/common';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { LayoutService } from "../../services/app.layout.service";
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, RouterLink, MatMenuModule, CommonModule, MatSnackBarModule],
+  imports: [MatToolbarModule, MatButtonModule, MatIconModule, RouterLink, MatMenuModule, CommonModule, ToastModule],
+  providers: [MessageService],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  authService=inject(AuthService);
-  matSnackBar = inject(MatSnackBar);
-  router = inject(Router);
-
-  constructor(public layoutService: LayoutService) {}
+  
+  constructor(
+    public layoutService: LayoutService,
+    public authService: AuthService,
+    private router: Router,
+    private messageService: MessageService
+  ) {}
 
   isLoggedIn() {
     return this.authService.isLoggedIn();
@@ -29,10 +34,6 @@ export class NavbarComponent {
 
   logout = () =>{
     this.authService.logout();
-    this.matSnackBar.open('Logout success', "Close", {
-      duration: 5000,
-      horizontalPosition:'center'
-    })
     this.router.navigate(['/login']);
   };
 }

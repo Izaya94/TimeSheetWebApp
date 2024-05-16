@@ -5,6 +5,7 @@ import { HelpComponent } from './pages/help/help.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { AboutComponent } from './pages/about/about.component';
 import { ContactComponent } from './pages/contact/contact.component';
+import { ToastDemoComponent } from './pages/toast-demo/toast-demo.component';
 
 export const routes: Routes = [
     {
@@ -32,4 +33,8 @@ export const routes: Routes = [
         component: ContactComponent,
 
     },
+    {
+        path: 'toast-demo',
+        component: ToastDemoComponent,
+    }
 ];
