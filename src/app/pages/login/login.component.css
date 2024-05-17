@@ -2,3 +2,15 @@
 .full-width-button {
     width: 100%;
 }
+
+.center-button {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* .center-link {
+    
+}
+ */

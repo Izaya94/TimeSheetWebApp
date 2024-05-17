@@ -57,7 +57,6 @@ export class LoginComponent implements OnInit{
                     severity: 'success',
                     summary: 'Success',
                     detail: response.message,
-                    life: 3000,
                   },
                 },
               };
