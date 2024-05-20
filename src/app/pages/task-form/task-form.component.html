@@ -1,0 +1,35 @@
+<div class="form-container">
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <div class="p-fluid p-formgrid p-grid">
+
+      <div class="p-field p-col-12 p-md-4">
+        <label for="projectName">Project Name</label>
+        <p-dropdown id="projectName" [options]="projects" formControlName="projectName" optionLabel="label" placeholder="Select a Project"></p-dropdown>
+      </div>
+
+      <div class="p-field p-col-12 p-md-4">
+        <label for="typeOfWork">Type of Work</label>
+        <p-dropdown id="typeOfWork" [options]="typeofwork" formControlName="typeOfWork" optionLabel="label" placeholder="Select a Work Type"></p-dropdown>
+      </div>
+
+      <div class="p-field p-col-12 p-md-4">
+        <label for="startTime">Start Time</label>
+        <p-calendar id="startTime" formControlName="startTime" timeOnly="true" hourFormat="12"></p-calendar>
+      </div>
+
+      <div class="p-field p-col-12 p-md-4">
+        <label for="endTime">End Time</label>
+        <p-calendar id="endTime" formControlName="endTime" timeOnly="true" hourFormat="12"></p-calendar>
+      </div>
+
+      <div class="p-field p-col-12 p-md-2">
+        <label for="totalHours">Total Hours</label>
+        <input id="totalHours" type="number" pInputText formControlName="totalHours" readonly />
+      </div>
+
+      <div class="p-col-12 p-md-12">
+        <button pButton type="submit" label="Submit"></button>
+      </div>
+    </div>
+  </form>
+</div>

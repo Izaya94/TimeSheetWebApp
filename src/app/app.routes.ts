@@ -6,6 +6,8 @@ import { RegisterComponent } from './pages/register/register.component';
 import { AboutComponent } from './pages/about/about.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { ToastDemoComponent } from './pages/toast-demo/toast-demo.component';
+import { TaskFormComponent } from './pages/task-form/task-form.component';
+import { TaskForm1Component } from './pages/task-form-1/task-form-1.component';
 
 export const routes: Routes = [
     {
@@ -36,5 +38,13 @@ export const routes: Routes = [
     {
         path: 'toast-demo',
         component: ToastDemoComponent,
+    },
+    {
+        path: 'task-form',
+        component: TaskFormComponent,
+    },
+    {
+        path: 'task-form-1',
+        component: TaskForm1Component,
     }
 ];

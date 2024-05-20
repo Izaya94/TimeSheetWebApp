@@ -1,0 +1,100 @@
+.navbar {
+    background-color: #6b46c1; /* Purple color */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Container for the home link on the left */
+.navbar-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+/* Container for the user details and menu on the right */
+.navbar-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-link {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #d1c4e9;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: #ffffff;
+}
+
+.user-name {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.user-role {
+    font-size: 0.875rem;
+    color: #d1c4e9;
+}
+
+.user-menu-button .p-menubar {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.user-menu-button .p-menubar .p-menubar-root-list {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-menu-button .p-menubar .p-menuitem-link {
+    color: #ffffff;
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+.user-menu-button .p-menubar .p-menuitem-link:hover {
+    color: #d1c4e9;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-left, .navbar-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .navbar-right {
+        margin-top: 1rem;
+        justify-content: flex-start;
+    }
+
+    .user-details {
+        align-items: flex-start;
+    }
+}
