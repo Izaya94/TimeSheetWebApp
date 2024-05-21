@@ -50,7 +50,9 @@ export class LoginComponent implements OnInit{
       if (this.loginForm.valid) {
         console.log('Login form is valid');
         this.authService.login(this.loginForm.value).subscribe({
+          
           next: (response) => {
+            if (response.flag == true){
             const navigationExtras: NavigationExtras = {
               state: {
                 toastMessage: {
@@ -61,18 +63,15 @@ export class LoginComponent implements OnInit{
                 },
               };
               this.router.navigate(['/'], navigationExtras);
-          },
-          error: (error) => {
-            console.log('Login error', error);
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message });
-            this.router.navigate(['/']);
-          }
-        });
-      } else {
-        console.log('Login form is invalid');
-  
+            }     
+            else if (response.flag == false){
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: response.message });
+                // this.router.navigate(['/login']);
+              }
+            }
+          })
+        };
       }
-    }
 
     testToast() {
       this.messageService.add({ severity: 'info', summary: 'Test', detail: 'This is a test message' });

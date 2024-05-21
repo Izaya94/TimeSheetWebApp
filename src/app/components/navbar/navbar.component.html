@@ -1,24 +1,27 @@
 <nav class="navbar">
     <p-toast position="bottom-center"></p-toast>
 
-    <div class="navbar-left">
-        <a *ngIf="isLoggedIn()" class="nav-link" routerLink="/">
+    <div class="navbar-left" *ngIf="isLoggedIn()">
+        <a class="nav-link" routerLink="/">
             Home
         </a>
-    </div>
+        <!-- <button pButton icon="pi pi-bars" class="p-button-text menu-toggle-button" ></button> -->
+        <button pButton icon="pi pi-bars"  class="p-button-text menu-toggle-button ml-5" style="color: white;" ></button>
+        <button pButton icon="pi pi-bookmark" [rounded]="true" class="p-button-text menu-toggle-button ml-5" style="color: white;"></button>
 
-    <div class="navbar-right" *ngIf="authService.getUserDetail() as userDetail">
-        <div class="user-details">
-            <h1 class="user-name">{{ userDetail?.fullName }}</h1>
-            <span class="user-role">{{ userDetail?.roles }}</span>
+        <div class="navbar-right" *ngIf="authService.getUserDetail() as userDetail">
+            <div class="user-details">
+                <h1 class="user-name">{{ userDetail?.fullName }}</h1>
+                <span class="user-role">{{ userDetail?.roles }}</span>
+            </div>
+            <p-menubar [model]="menuBarItems" class="user-menu-button"></p-menubar>
         </div>
-        <p-menubar [model]="menuBarItems" class="user-menu-button"></p-menubar>
     </div>
 
     <div class="navbar-right" *ngIf="!isLoggedIn()">
-        <a pButton routerLink="/login" label="Login" class="p-button-text nav-link"></a>
-        <a pButton routerLink="/help" label="Help" class="p-button-text nav-link"></a>
-        <a pButton routerLink="/about" label="About" class="p-button-text nav-link"></a>
-        <a pButton routerLink="/contact" label="Contact" class="p-button-text nav-link"></a>
+        <a pButton routerLink="/login" label="Login" class="p-button-text nav-link">Login</a>
+        <a pButton routerLink="/help" label="Help" class="p-button-text nav-link">Help</a>
+        <a pButton routerLink="/about" label="About" class="p-button-text nav-link">About</a>
+        <a pButton routerLink="/contact" label="Contact" class="p-button-text nav-link">Contact</a>
     </div>
 </nav>

@@ -1,23 +1,24 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router, RouterLink } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { AuthService } from '../../services/auth.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { ButtonModule } from 'primeng/button';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FileUploadModule } from 'primeng/fileupload';
+
 
 @Component({
   selector: 'app-help',
   standalone: true,
-  imports: [MatInputModule, MatIconModule, ReactiveFormsModule, RouterLink, ButtonModule, ToastModule],
+  imports: [RouterLink, ToastModule, FileUploadModule],
   templateUrl: './help.component.html',
   styleUrl: './help.component.css',
   providers: [MessageService]
 })
 export class HelpComponent implements OnInit{
+onUpload($event: Event) {
+throw new Error('Method not implemented.');
+}
   constructor(
     private authService: AuthService,
     private messageService: MessageService,
