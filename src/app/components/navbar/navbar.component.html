@@ -6,7 +6,7 @@
             Home
         </a>
         <!-- <button pButton icon="pi pi-bars" class="p-button-text menu-toggle-button" ></button> -->
-        <button pButton icon="pi pi-bars"  class="p-button-text menu-toggle-button ml-5" style="color: white;" ></button>
+        <button pButton icon="pi pi-bars"  class="p-button-text menu-toggle-button ml-5" style="color: white;" (click)="layoutService.onMenuToggle()"></button>
         <button pButton icon="pi pi-bookmark" [rounded]="true" class="p-button-text menu-toggle-button ml-5" style="color: white;"></button>
 
         <div class="navbar-right" *ngIf="authService.getUserDetail() as userDetail">
@@ -19,9 +19,9 @@
     </div>
 
     <div class="navbar-right" *ngIf="!isLoggedIn()">
-        <a pButton routerLink="/login" label="Login" class="p-button-text nav-link">Login</a>
-        <a pButton routerLink="/help" label="Help" class="p-button-text nav-link">Help</a>
-        <a pButton routerLink="/about" label="About" class="p-button-text nav-link">About</a>
-        <a pButton routerLink="/contact" label="Contact" class="p-button-text nav-link">Contact</a>
+        <a pButton routerLink="/login" label="Login" class="p-button-text nav-link"></a>
+        <a pButton routerLink="/help" label="Help" class="p-button-text nav-link"></a>
+        <a pButton routerLink="/about" label="About" class="p-button-text nav-link"></a>
+        <a pButton routerLink="/contact" label="Contact" class="p-button-text nav-link"></a>
     </div>
 </nav>

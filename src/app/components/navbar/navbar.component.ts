@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -21,6 +21,13 @@ import { PrimeIcons } from 'primeng/api';
 export class NavbarComponent implements OnInit{
   
   menuBarItems: MenuItem[] = []; 
+
+  @ViewChild('menubutton') menuButton!: ElementRef;
+
+  @ViewChild('topbarmenubutton') topbarMenuButton!: ElementRef;
+
+  @ViewChild('topbarmenu') menu!: ElementRef;
+
   constructor(
     public layoutService: LayoutService,
     public authService: AuthService,

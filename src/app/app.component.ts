@@ -6,13 +6,14 @@ import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { ToastDemoComponent } from './pages/toast-demo/toast-demo.component';
 import { LoginComponent } from './pages/login/login.component';
+import { FooterComponent } from "./components/footer/footer.component";
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, MatButtonModule, NavbarComponent, ToastDemoComponent, LoginComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'app-root',
+    standalone: true,
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css',
+    imports: [CommonModule, RouterOutlet, MatButtonModule, NavbarComponent, ToastDemoComponent, LoginComponent, FooterComponent]
 })
 export class AppComponent {
   title = 'TimeSheetWebApp';
