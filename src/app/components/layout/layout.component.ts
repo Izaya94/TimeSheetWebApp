@@ -1,15 +1,33 @@
 import { Component, OnDestroy, Renderer2, ViewChild } from '@angular/core';
-import { Sidebar } from 'primeng/sidebar';
+import { Sidebar, SidebarModule } from 'primeng/sidebar';
 import { Subscription, filter } from 'rxjs';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { NavbarComponent } from '../navbar/navbar.component';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { LayoutService } from '../../services/app.layout.service';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { InputTextModule } from 'primeng/inputtext';
+import { RippleModule } from 'primeng/ripple';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [],
+  imports:  [
+    FormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    InputTextModule,
+    SidebarModule,
+    RippleModule,
+    RouterModule,
+    NavbarComponent,
+    SidebarComponent,
+    FooterComponent
+],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css'
 })

@@ -8,6 +8,7 @@ import { MenuItem, MessageService } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
+import { SidebarService } from '../../services/sidebar.service';
 // import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
@@ -33,7 +34,7 @@ export class NavbarComponent implements OnInit{
     public authService: AuthService,
     private router: Router,
     private messageService: MessageService,
-    // private sidebarService: SidebarService
+    private sidebarService: SidebarService
   ) {}
 
   ngOnInit() {
@@ -66,7 +67,7 @@ export class NavbarComponent implements OnInit{
     console.log('Clicked testToast button');
   }
 
-  // toggleSidebar() {
-  //   this.sidebarService.toggleSidebar();
-  // }
+  toggleSidebar() {
+    this.sidebarService.toggleSidebar();
+  }
 }
