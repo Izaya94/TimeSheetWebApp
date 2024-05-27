@@ -1,1 +1,66 @@
-<p>calendar works!</p>
+<div class="card flex justify-content-center">
+    <p-dialog 
+      header="Work Timeline"
+      [modal]="true"
+      [(visible)]="visible"
+      [style]="{ width: '650px', height: '500px' }"
+      [maximizable]="true"
+      >
+        <div class="p-fluid">
+          <div class="p-field">
+            <label for="workDate">Selected Date</label>
+            <p>{{ selectedDate | date: 'dd-MMM-yyyy'}}</p>
+          </div>
+          <div style="margin-bottom: 20px;"></div>
+          <div class="p-field flex-auto">
+            <label for="projectTitle">Project Title</label>
+            <div style="margin-bottom: 12px;"></div>
+            <!-- <input id="projectTitle" type="text" pInputText [(ngModel)]="projectTitle"> -->
+            <p-dropdown id="projectName" [(ngModel)]="projectTitle"  [options]="projects" optionLabel="label" placeholder="Select a Project"></p-dropdown>
+            
+          </div>
+          <div style="margin-bottom: 20px;"></div>
+          <div class="p-field flex-auto">
+            <label for="workType">Work Type</label>
+            <div style="margin-bottom: 12px;"></div>
+            <!-- <input id="workType" type="text" pInputText [(ngModel)]="workType"> -->
+            <p-dropdown id="typeOfWork" [options]="typeofwork" [(ngModel)]="workType" optionLabel="label" placeholder="Select a Work Type"></p-dropdown>
+            
+          </div>
+          <div style="margin-bottom: 20px;"></div>
+          <div class="p-field flex-auto">
+            <div style="display: flex; justify-content: space-between;">
+              <div style="margin-right: 10px;">
+                <label for="workStart">Start Time</label>
+                <div style="margin-bottom: 12px;"></div>
+                <p-calendar id="workStart" [(ngModel)]="workStart" [showTime]="true" [hourFormat]="'12'" [timeOnly]="true" [readonlyInput]="true"></p-calendar>
+              </div>
+              <div>
+                <label for="workEnd">End Time</label>
+                <div style="margin-bottom: 12px;"></div>
+                <p-calendar id="workEnd" [(ngModel)]="workEnd" [showTime]="true" [hourFormat]="'12'" [timeOnly]="true" [readonlyInput]="true"></p-calendar>
+              </div>
+            </div>
+          </div>
+          <div style="margin-bottom: 20px;"></div>
+          <div class="p-field">
+            <button pButton type="button" label="Add Work" (click)="addWork()"></button>
+          </div>
+        </div>
+    </p-dialog>
+  </div>
+  
+  <ul>
+    <li *ngFor="let group of groupedEvents">
+      <b>{{ group.date }}</b>
+      <br>
+      <div *ngFor="let event of group.events">
+        <i>{{ event.title }}</i>
+      </div>
+    </li>
+  </ul>
+
+<full-calendar
+  *ngIf="calendarVisible()"
+  [options]="calendarOptions()"
+></full-calendar>
