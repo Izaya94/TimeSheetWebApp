@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild, signal } from '@angular/core';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, DateSelectArg, EventApi, EventClickArg } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -16,21 +16,22 @@ import { CalendarModule } from 'primeng/calendar';
 import { IProjectsList } from '../../interfaces/projects-list';
 import { ITypeOfWork } from '../../interfaces/type-of-work';
 import { DropdownModule } from 'primeng/dropdown';
+import { CheckboxModule } from 'primeng/checkbox';
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [FullCalendarModule, CommonModule, RouterOutlet, DialogModule, InputTextModule, ButtonModule, FormsModule, CalendarModule, DropdownModule],
+  imports: [FullCalendarModule, CommonModule, RouterOutlet, DialogModule, InputTextModule, ButtonModule, FormsModule, CalendarModule, DropdownModule, CheckboxModule],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css'
 })
-export class CalendarComponent implements OnInit{
+export class CalendarComponent implements OnInit, AfterViewInit{
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
   visible: boolean = false;
   maximizable: boolean = true;
-  workType: string = '';
-  projectTitle: string = '';
-  projects!: IProjectsList[]; 
-  typeofwork!: ITypeOfWork[];
+  workType: ITypeOfWork | null = null;
+  projectTitle: IProjectsList | null = null;
+  projects: IProjectsList[] = []; 
+  typeofwork: ITypeOfWork[] = [];
   workStart: Date = new Date();
   workEnd: Date = new Date();
   selectedDate: string = '';
@@ -64,6 +65,8 @@ export class CalendarComponent implements OnInit{
     */
   });
   currentEvents: EventApi[] = [];
+  enterHours: boolean = false;
+  workHours: number = 1;
 
   constructor(private changeDetector: ChangeDetectorRef) {
   }
@@ -112,23 +115,61 @@ export class CalendarComponent implements OnInit{
     //   });
     // }
     this.selectedDate = selectInfo.startStr;
+
     this.workStart = new Date(selectInfo.startStr);
-    this.workEnd = new Date(selectInfo.endStr);
+    this.workStart.setHours(new Date().getHours());
+    this.workStart.setMinutes(0);
+    this.workStart.setSeconds(0);
+
+    this.workEnd = new Date(this.workStart.getTime());
+    this.workEnd.setHours(this.workEnd.getHours()+ 1);
+
     this.visible = true;
   }
 
   addWork(){
+    console.log('Project Title:', this.projectTitle);
+    console.log('Work Type:', this.workType);
+    console.log('Work Start:', this.workStart);
+    console.log('Work End:', this.workEnd);
+
+    if (!this.calendarComponent) {
+      console.error('CalendarComponent is not available.');
+      return;
+    }
+    
     const calendarApi = this.calendarComponent.getApi();
-    if (this.workType && this.workStart && this.workEnd) {
+    if (this.projectTitle && this.workType && this.workStart && this.workEnd) {
+      
+      const projectTitle = (this.projectTitle as IProjectsList).name;
+      const workType = (this.workType as ITypeOfWork).name;
+
+      // const duration = (this.workEnd.getTime() - this.workStart.getTime()) / (1000 * 60 * 60);
+
+      let duration = 0;
+      let eventStart = this.workStart;
+      let eventEnd = this.workEnd;
+
+      // const startTime = this.workStart.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      // const endTime = this.workEnd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      if (this.enterHours){
+        // eventEnd = new Date(eventStart.getTime() + this.workHours * 60 * 60 * 1000);
+        duration = this.workHours;
+      } else {
+        duration = (eventEnd.getTime() - eventStart.getTime()) / (1000 * 60 * 60);
+      }
+
       calendarApi.addEvent({
-        title: this.workType,
+        // title:  `${projectTitle} - ${workType} (${startTime} - ${endTime}, ${duration.toFixed(2)} hrs)`,
+        title:  `${projectTitle} - ${workType} (${duration.toFixed(2)} hrs)`,
         start: this.workStart,
         end: this.workEnd,
         allDay: false
       });
       this.visible = false;
-      this.projectTitle = '';
-      this.workType = '';
+      this.projectTitle = null;
+      this.workType = null;
       this.workStart = new Date();
       this.workEnd = new Date();
       this.selectedDate = '';
@@ -157,6 +198,14 @@ export class CalendarComponent implements OnInit{
     }, {} as { [key: string]: EventApi[]});
 
     return Object.entries(grouped).map(([date, events]) => ({date, events}));
+  }
+
+  ngAfterViewInit() {
+    if (!this.calendarComponent) {
+      console.error('CalendarComponent is not initialized.');
+    } else {
+      console.log('CalendarComponent initialized successfully.');
+    }
   }
 
 }

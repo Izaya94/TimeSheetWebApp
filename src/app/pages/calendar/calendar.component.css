@@ -1,0 +1,34 @@
+/* Ensure event titles wrap within the event boxes */
+.fc-event-title-container {
+    white-space: normal !important;
+    word-wrap: break-word;
+}
+
+/* Additional styling for the event title to ensure proper wrapping and avoid overflow */
+.fc-event-title {
+    display: block;
+    white-space: normal !important;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+/* Ensure the entire event element respects text wrapping */
+.fc-event {
+    display: block;
+    white-space: normal !important;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    /* Align checkbox and label vertically */
+}
+
+.checkbox-wrapper label {
+    margin-left: 8px;
+    /* Add space between checkbox and label */
+    cursor: pointer;
+    /* Change cursor to pointer on label hover */
+}
