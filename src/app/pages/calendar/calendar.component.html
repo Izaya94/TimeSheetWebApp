@@ -1,6 +1,7 @@
 <div class="card flex justify-content-center">
+  <p-toast position="top-right"></p-toast>
   <p-dialog header="Work Timeline" [modal]="true" [(visible)]="visible" [style]="{ width: '650px', height: '550px' }"
-    [maximizable]="true">
+    [maximizable]="true" (onHide)="resetForm()">
     <div class="p-fluid">
       <div class="p-field">
         <label for="workDate">Selected Date</label>
@@ -25,7 +26,7 @@
       <div style="margin-bottom: 20px"></div>
 
       <div class="p-field-checkbox">
-        <div class="checkbox-wrapper">
+        <div class="checkbox-wrapper" (click)="toggleEnterHours()">
           <p-checkbox id="enterHours" [(ngModel)]="enterHours" binary="true"></p-checkbox>
           <label for="enterHours">Enter hours instead of start and end time(s).</label>
         </div>
@@ -36,7 +37,7 @@
         <div class="p-field">
           <label for="workHours">Work Hours</label>
           <div style="margin-bottom: 12px"></div>
-          <input type="number" id="workHours" pInputText [(ngModel)]="workHours">
+          <input type="number" id="workHours" pInputText [(ngModel)]="workHours" min="1">
         </div>
       </div>
       <div style="margin-bottom: 20px"></div>
@@ -46,13 +47,13 @@
             <div style="margin-right: 10px">
               <label for="workStart">Start Time</label>
               <div style="margin-bottom: 12px"></div>
-              <p-calendar id="workStart" [(ngModel)]="workStart" [showTime]="true" [hourFormat]="'12'" [timeOnly]="true"
+              <p-calendar id="workStart" [(ngModel)]="workStart" [showTime]="true" [hourFormat]="'12'" [timeOnly]="true" stepMinute="30"
                 [readonlyInput]="true"></p-calendar>
             </div>
             <div>
               <label for="workEnd">End Time</label>
               <div style="margin-bottom: 12px"></div>
-              <p-calendar id="workEnd" [(ngModel)]="workEnd" [showTime]="true" [hourFormat]="'12'" [timeOnly]="true"
+              <p-calendar id="workEnd" [(ngModel)]="workEnd" [showTime]="true" [hourFormat]="'12'" [timeOnly]="true" stepMinute="30"
                 [readonlyInput]="true"></p-calendar>
             </div>
           </div>

@@ -8,7 +8,7 @@ import listPlugin from '@fullcalendar/list';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 // import { INITIAL_EVENTS, createEventId } from './event-utils';
-import { Dialog, DialogModule } from 'primeng/dialog';
+import {  DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
@@ -17,12 +17,16 @@ import { IProjectsList } from '../../interfaces/projects-list';
 import { ITypeOfWork } from '../../interfaces/type-of-work';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ToastModule } from 'primeng/toast';
+import { ToastService } from '../../services/toast.service';
+import { Message, MessageService } from 'primeng/api';
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [FullCalendarModule, CommonModule, RouterOutlet, DialogModule, InputTextModule, ButtonModule, FormsModule, CalendarModule, DropdownModule, CheckboxModule],
+  imports: [FullCalendarModule, CommonModule, RouterOutlet, DialogModule, InputTextModule, ButtonModule, FormsModule, CalendarModule, DropdownModule, CheckboxModule, ToastModule],
   templateUrl: './calendar.component.html',
-  styleUrl: './calendar.component.css'
+  styleUrl: './calendar.component.css',
+  providers: [MessageService]
 })
 export class CalendarComponent implements OnInit, AfterViewInit{
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
@@ -68,7 +72,7 @@ export class CalendarComponent implements OnInit, AfterViewInit{
   enterHours: boolean = false;
   workHours: number = 1;
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+  constructor(private changeDetector: ChangeDetectorRef, private messageService: MessageService) {
   }
   ngOnInit(){
       this.projects = [
@@ -116,6 +120,8 @@ export class CalendarComponent implements OnInit, AfterViewInit{
     // }
     this.selectedDate = selectInfo.startStr;
 
+    
+
     this.workStart = new Date(selectInfo.startStr);
     this.workStart.setHours(new Date().getHours());
     this.workStart.setMinutes(0);
@@ -135,6 +141,11 @@ export class CalendarComponent implements OnInit, AfterViewInit{
 
     if (!this.calendarComponent) {
       console.error('CalendarComponent is not available.');
+      return;
+    }
+
+    if (this.workHours < 1) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Hours must be greater than 0.' });
       return;
     }
     
@@ -173,8 +184,32 @@ export class CalendarComponent implements OnInit, AfterViewInit{
       this.workStart = new Date();
       this.workEnd = new Date();
       this.selectedDate = '';
+
+      this.messageService.add({severity:'success', summary: 'Success', detail:('Work added successfully.')})
+
+      // this.toastService.showSuccess('Work added successfully.');
+    }
+    else {
+      this.messageService.add({severity:'error', summary: 'Error', detail:('Please fill in all required fields.')})
+      //   this.toastService.showError('Please fill in all required fields.');
     }
   }
+
+  resetForm() {
+    this.projectTitle = null;
+    this.workType = null;
+    this.workStart = new Date();
+    this.workEnd = new Date();
+    this.selectedDate = '';
+    this.workHours = 1;
+    this.enterHours = false;
+  }
+
+  toggleEnterHours() {
+    this.enterHours = !this.enterHours;
+  }
+  
+  
 
   handleEventClick(clickInfo: EventClickArg) {
     if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
