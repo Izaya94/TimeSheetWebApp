@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit{
 
 	constructor(private roleService: RoleService, private authService: AuthService){}
 
-	roles$!:IRole[] | null;
+	roles!:IRole[] | null;
 	fb = inject(FormBuilder);
 	registerForm!: FormGroup;
 	router = inject(Router);
@@ -85,7 +85,7 @@ export class RegisterComponent implements OnInit{
 	}
 
 	onDataGet(roleResponseList: IRole[]) {
-		this.roles$=roleResponseList;
+		this.roles = roleResponseList;
 	}
 
 	onSubmit(){

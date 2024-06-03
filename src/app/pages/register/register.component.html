@@ -26,9 +26,9 @@
 		  <label for="joindate" class="mb-1">Join Date</label>
 		  <input id="joindate" type="date" class="p-inputtext w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" formControlName="joinDate">
 		</div>
-		<div class="flex flex-col" *ngIf="roles$">
+		<div class="flex flex-col" *ngIf="roles">
 			<label for="roles" class="mb-1">Roles</label>
-			<p-dropdown formControlName="roles" [style]="{'width': '100%'}" [options]="roles$" optionLabel="name" >
+			<p-dropdown formControlName="roles" [style]="{'width': '100%'}" [options]="roles" optionLabel="name" >
 		</p-dropdown>
 		  </div>
 	  </div><br>

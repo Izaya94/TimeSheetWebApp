@@ -1,3 +1,5 @@
+import { IDataUpdateResponse } from "./shared/data-update-response"
+
 export interface IRoleResponse
 {
     "dataUpdateResponse": IDataUpdateResponse,
@@ -11,10 +13,3 @@ export interface IRole
     "totalUsers": number
 }
 
-
-export interface IDataUpdateResponse
-{
-    "status" : boolean,
-    "description": string,
-    "recordCount": number
-}

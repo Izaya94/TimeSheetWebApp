@@ -5,8 +5,9 @@ import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
-import { IProjectsList } from '../../interfaces/projects-list';
+
 import { ITypeOfWork } from '../../interfaces/type-of-work';
+import { ILookupList, ILookupListResponse } from '../../interfaces/lookup';
 
 @Component({
   selector: 'app-task-form',
@@ -18,8 +19,8 @@ import { ITypeOfWork } from '../../interfaces/type-of-work';
 
 export class TaskFormComponent implements OnInit {
   taskForm!: FormGroup;
-  projects!: IProjectsList[]; 
-  typeofwork!: ITypeOfWork[];
+  projects!: ILookupListResponse[]; 
+  typeofwork!: ILookupListResponse[];
 
   constructor(
     private fb: FormBuilder,

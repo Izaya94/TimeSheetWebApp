@@ -1,6 +1,6 @@
 <div class="card flex justify-content-center">
   <p-toast position="top-right"></p-toast>
-  <p-dialog header="Work Timeline" [modal]="true" [(visible)]="visible" [style]="{ width: '650px', height: '550px' }"
+  <p-dialog header="Work Timeline" [modal]="true" [(visible)]="visible" [style]="{ width: '650px', height: '615px' }"
     [maximizable]="true" (onHide)="resetForm()">
     <div class="p-fluid">
       <div class="p-field">
@@ -12,7 +12,7 @@
         <label for="projectTitle">Project Title</label>
         <div style="margin-bottom: 12px"></div>
         <!-- <input id="projectTitle" type="text" pInputText [(ngModel)]="projectTitle"> -->
-        <p-dropdown id="projectTitle" [(ngModel)]="projectTitle" [options]="projects" optionLabel="name"
+        <p-dropdown id="projectTitle" [(ngModel)]="projectTitle" [options]="projects" optionLabel="tagName"
           placeholder="Select a Project"></p-dropdown>
       </div>
       <div style="margin-bottom: 20px"></div>
@@ -20,8 +20,16 @@
         <label for="workType">Work Type</label>
         <div style="margin-bottom: 12px"></div>
         <!-- <input id="workType" type="text" pInputText [(ngModel)]="workType"> -->
-        <p-dropdown id="workType" [options]="typeofwork" [(ngModel)]="workType" optionLabel="name"
+        <p-dropdown id="workType"  [(ngModel)]="workType" [options]="typeofwork" optionLabel="tagName"
           placeholder="Select a Work Type"></p-dropdown>
+      </div>
+      <div style="margin-bottom: 20px"></div>
+
+      <div class="p-field flex-auto">
+        <label for="workType">Description (Optional)</label>
+        <div style="margin-bottom: 12px"></div>
+        <!-- <input id="workType" type="text" pInputText [(ngModel)]="workType"> -->
+        <input type="text" pInputText  placeholder="Enter Description Here" />
       </div>
       <div style="margin-bottom: 20px"></div>
 
