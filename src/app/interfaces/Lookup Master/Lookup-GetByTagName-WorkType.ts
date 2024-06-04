@@ -1,11 +1,9 @@
-
-import { IDataUpdateResponse } from "/Users/pujar/OneDrive/Desktop/Vscode/TimeSheet_Web/TimeSheetWebApp/src/app/interfaces/shared/data-update-response";
-
+import { IDataUpdateResponse } from "../shared/data-update-response";
 
 export interface ILookupGetByTagNameWorkTypeResponse
 {
     "dataUpdateResponse": IDataUpdateResponse,
-    "lookupGetByTagNameWorkTypeList": ILookupGetByTagNameWorkTypeList[],
+    "lookupGetByTagNameList": ILookupGetByTagNameWorkTypeList[];
 }
 
 export interface ILookupGetByTagNameWorkTypeList

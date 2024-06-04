@@ -118,20 +118,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
-    // const title = prompt('Please enter a new title for your event');
-    // const calendarApi = selectInfo.view.calendar;
-
-    // calendarApi.unselect(); // clear date selection
-
-    // if (title) {
-    //   calendarApi.addEvent({
-    //     // id: createEventId(),
-    //     title,
-    //     start: selectInfo.startStr,
-    //     end: selectInfo.endStr,
-    //     allDay: selectInfo.allDay
-    //   });
-    // }
     this.selectedDate = selectInfo.startStr;
 
     this.workStart = new Date(selectInfo.startStr);
@@ -157,7 +143,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (this.workHours < 1) {
+    if (this.workHours <= 0) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -168,20 +154,14 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
     const calendarApi = this.calendarComponent.getApi();
     if (this.projectTitle && this.workType && this.workStart && this.workEnd) {
-      // const projectTitle = (this.projectTitle as IProjectsList).name;
-      // const workType = (this.workType as ITypeOfWork).name;
-
-      // const duration = (this.workEnd.getTime() - this.workStart.getTime()) / (1000 * 60 * 60);
 
       let duration = 0;
       let eventStart = this.workStart;
       let eventEnd = this.workEnd;
 
-      // const startTime = this.workStart.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      // const endTime = this.workEnd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
 
       if (this.enterHours) {
-        // eventEnd = new Date(eventStart.getTime() + this.workHours * 60 * 60 * 1000);
         duration = this.workHours;
       } else {
         duration =
@@ -189,8 +169,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       }
 
       calendarApi.addEvent({
-        // title:  `${projectTitle} - ${workType} (${startTime} - ${endTime}, ${duration.toFixed(2)} hrs)`,
-        // title:  `${projectTitle} - ${workType} (${duration.toFixed(2)} hrs)`,
         start: this.workStart,
         end: this.workEnd,
         allDay: false,
@@ -208,14 +186,12 @@ export class CalendarComponent implements OnInit, AfterViewInit {
         detail: 'Work added successfully.',
       });
 
-      // this.toastService.showSuccess('Work added successfully.');
     } else {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
         detail: 'Please fill in all required fields.',
       });
-      //   this.toastService.showError('Please fill in all required fields.');
     }
   }
 
@@ -246,7 +222,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   handleEvents(events: EventApi[]) {
     this.currentEvents = events;
-    this.changeDetector.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
   }
 
   get groupedEvents() {
@@ -270,27 +245,42 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     }
   }
 
-  lookupGetByTagNameProjectListGet(lookupProjectListGet: ILookupGetByTagNameProjectList[]) {
-    this.projects = lookupProjectListGet;
+  lookupGetByTagNameProjectListGet(lookupGetByTagNameProjectList: ILookupGetByTagNameProjectList[]) {
+    this.projects = lookupGetByTagNameProjectList;
   }
 
-  lookupGetByTagNameWorkTypeListGet(lookupWorkTypeListGet: ILookupGetByTagNameWorkTypeList[] ) {
-    this.typeofwork = lookupWorkTypeListGet;
+  lookupGetByTagNameWorkTypeListGet(lookupGetByTagNameWorkTypeList: ILookupGetByTagNameWorkTypeList[] ) {
+    this.typeofwork = lookupGetByTagNameWorkTypeList;
   }
 
   calendar() {
-    this.lookupGetByTagNameProjectService.lookupProjectDataGet().subscribe((response) => {
-      console.log(response);
-      if (response.dataUpdateResponse.status) {
-        this.lookupGetByTagNameWorkTypeListGet(response.lookupGetByTagNameProjectList);
+    this.lookupGetByTagNameProjectService.lookupProjectDataGet().subscribe((response: any) => {
+      console.log('Full Project Response:', response);
+      if (response.dataUpdateResponse && response.dataUpdateResponse.status) {
+        this.projects = response.lookupGetByTagNameList;
+        console.log('Formatted Projects:', this.projects);
+        this.changeDetector.detectChanges();
+      }
+      if (response.dataUpdateResponse && response.dataUpdateResponse.status && response.lookupGetByTagNameProjectList) {
+        this.projects = response.lookupGetByTagNameList;
+        console.log('Formatted Projects:', this.projects);
       }
     });
-
-    this.lookupGetByTagNameWorkTypeService.lookupWorkTypeDataGet().subscribe((response) => {
-      console.log(response);
-      if (response.dataUpdateResponse.status) {
-        this.lookupGetByTagNameWorkTypeListGet(response.lookupGetByTagNameWorkTypeList);
+    
+    this.lookupGetByTagNameWorkTypeService.lookupWorkTypeDataGet().subscribe((response: any) => {
+      console.log('Full Work Type Response:', response);
+      if (response.dataUpdateResponse && response.dataUpdateResponse.status) {
+        this.typeofwork = response.lookupGetByTagNameList;
+        console.log('Formatted Work Types:', this.typeofwork);
+        this.changeDetector.detectChanges();
+      }
+      if (response.dataUpdateResponse && response.dataUpdateResponse.status && response.lookupGetByTagNameWorkTypeList) {
+        this.typeofwork = response.lookupGetByTagNameList;
+        console.log('Formatted Work Types:', this.typeofwork);
       }
     });
-  }
+    
+    
+  };
+  
 }
