@@ -36,6 +36,8 @@ import { LookupGetByTagNameWorkTypeService } from '../../services/LookupServices
 import { LookupGetByTagNameProjectService } from '../../services/LookupServices/lookup-get-by-tag-name-project.service';
 import { ILookupGetByTagNameProjectList } from '../../interfaces/Lookup Master/Lookup-GetByTagName-Project';
 import { ILookupGetByTagNameWorkTypeList } from '../../interfaces/Lookup Master/Lookup-GetByTagName-WorkType';
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-calendar',
   standalone: true,
@@ -97,6 +99,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   workHours: number = 1;
 
   constructor(
+    private http: HttpClient,
     private changeDetector: ChangeDetectorRef,
     private messageService: MessageService,
     private lookupGetByTagNameWorkTypeService: LookupGetByTagNameWorkTypeService,
@@ -283,4 +286,35 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     
   };
   
+
+  submitForm(){
+    const formData = {
+      projectTitle: this.projectTitle,
+      workType: this.workType,
+      description: this.description,
+      workStart: this.workStart,
+      workEnd: this.workEnd,
+      workHours: this.workHours,
+      selectedDate: this.projectTitle,
+    }
+
+    this.http.post('https://your-api-endpoint.com/submit-work', formData).subscribe(
+      (response) => {
+        console.log('Form submitted successfully:', response);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Work added successfully.',
+        });
+      },
+      (error) => {
+        console.error('Error submitting form:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to add work.',
+        });
+      }
+    );
+  }
 }

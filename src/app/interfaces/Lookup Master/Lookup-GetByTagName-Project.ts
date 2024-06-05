@@ -3,7 +3,7 @@ import { IDataUpdateResponse } from "../shared/data-update-response"
 export interface ILookupGetByTagNameProjectResponse
 {
     "dataUpdateResponse": IDataUpdateResponse,
-    "lookupGetByTagNameList": ILookupGetByTagNameProjectList[];
+    "LookupGetByTagNameProjectList": ILookupGetByTagNameProjectList[];
 }
 
 export interface ILookupGetByTagNameProjectList

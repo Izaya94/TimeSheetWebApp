@@ -5,7 +5,7 @@ import { Observable, map } from 'rxjs';
 import { AuthResponse } from '../interfaces/auth-response';
 import { HttpClient } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
-import { IEmployeeDTOAdd } from '../interfaces/employee-create-request';
+import { IEmployeeDTOAdd } from '../interfaces/Employee/EmployeeInsert';
 
 @Injectable({
   providedIn: 'root',

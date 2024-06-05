@@ -4,26 +4,37 @@
 
       <div class="p-field p-col-12 p-md-4">
         <label for="projectName">Project Name</label>
-        <p-dropdown id="projectName" [options]="projects" formControlName="projectName" optionLabel="label" placeholder="Select a Project"></p-dropdown>
+        <div style="margin-bottom: 12px"></div>
+        <p-dropdown id="projectName" [options]="projects" formControlName="projectName" optionLabel="keyData" placeholder="Select a Project"></p-dropdown>
       </div>
 
       <div class="p-field p-col-12 p-md-4">
         <label for="typeOfWork">Type of Work</label>
-        <p-dropdown id="typeOfWork" [options]="typeofwork" formControlName="typeOfWork" optionLabel="label" placeholder="Select a Work Type"></p-dropdown>
+        <div style="margin-bottom: 12px"></div>
+        <p-dropdown id="typeOfWork" [options]="typeofwork" formControlName="typeOfWork" optionLabel="keyData" placeholder="Select a Work Type"></p-dropdown>
+      </div>
+
+      <div class="p-field p-col-12 p-md-2">
+        <label for="description">Description</label>
+        <div style="margin-bottom: 12px"></div>
+        <input id="description" type="text" pInputText formControlName="description" />
       </div>
 
       <div class="p-field p-col-12 p-md-4">
         <label for="startTime">Start Time</label>
-        <p-calendar id="startTime" formControlName="startTime" timeOnly="true" hourFormat="12"></p-calendar>
+        <div style="margin-bottom: 12px"></div>
+        <p-calendar id="startTime" [readonlyInput]="true" formControlName="startTime" timeOnly="true" hourFormat="12" stepMinute="30"></p-calendar>
       </div>
 
       <div class="p-field p-col-12 p-md-4">
         <label for="endTime">End Time</label>
-        <p-calendar id="endTime" formControlName="endTime" timeOnly="true" hourFormat="12"></p-calendar>
+        <div style="margin-bottom: 12px"></div>
+        <p-calendar id="endTime" [readonlyInput]="true" formControlName="endTime" timeOnly="true" hourFormat="12" stepMinute="30"></p-calendar>
       </div>
 
       <div class="p-field p-col-12 p-md-2">
         <label for="totalHours">Total Hours</label>
+        <div style="margin-bottom: 12px"></div>
         <input id="totalHours" type="number" pInputText formControlName="totalHours" readonly />
       </div>
 

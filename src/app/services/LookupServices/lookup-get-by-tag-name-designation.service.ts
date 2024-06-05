@@ -13,7 +13,7 @@ export class LookupGetByTagNameDesignationService {
 
   constructor(private http: HttpClient) { }
 
-  getlookup = (): Observable<ILookupGetByTagNameDesignationResponse> => {
+  lookupDesignationDataGet = (): Observable<ILookupGetByTagNameDesignationResponse> => {
       return this.http.get<ILookupGetByTagNameDesignationResponse>(`${this.apiUrl}Lookup/LookupGetByTagName/Designation`);
 
   }

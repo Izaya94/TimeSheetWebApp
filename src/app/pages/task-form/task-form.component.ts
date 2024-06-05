@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -8,6 +8,10 @@ import { InputTextModule } from 'primeng/inputtext';
 
 import { ITypeOfWork } from '../../interfaces/type-of-work';
 import { ILookupList, ILookupListResponse } from '../../interfaces/lookup';
+import { ILookupGetByTagNameProjectList } from '../../interfaces/Lookup Master/Lookup-GetByTagName-Project';
+import { ILookupGetByTagNameWorkTypeList } from '../../interfaces/Lookup Master/Lookup-GetByTagName-WorkType';
+import { LookupGetByTagNameProjectService } from '../../services/LookupServices/lookup-get-by-tag-name-project.service';
+import { LookupGetByTagNameWorkTypeService } from '../../services/LookupServices/lookup-get-by-tag-name-work-type.service';
 
 @Component({
   selector: 'app-task-form',
@@ -19,11 +23,14 @@ import { ILookupList, ILookupListResponse } from '../../interfaces/lookup';
 
 export class TaskFormComponent implements OnInit {
   taskForm!: FormGroup;
-  projects!: ILookupListResponse[]; 
-  typeofwork!: ILookupListResponse[];
+  projects!: ILookupGetByTagNameProjectList[]; 
+  typeofwork!: ILookupGetByTagNameWorkTypeList[];
 
   constructor(
+    private changeDetector: ChangeDetectorRef,
     private fb: FormBuilder,
+    private lookupGetByTagNameProjectService: LookupGetByTagNameProjectService,
+    private lookupGetByTagNameWorkTypeService: LookupGetByTagNameWorkTypeService,
   ) 
   {}
 
@@ -31,6 +38,7 @@ export class TaskFormComponent implements OnInit {
     this.taskForm = this.fb.group({
       projectName: ['', Validators.required],
       typeOfWork: ['', Validators.required],
+      designation: [''],
       startTime: [null, Validators.required],
       endTime: [null, Validators.required],
       totalHours: [{ value: 0, disabled: true }]
@@ -65,4 +73,36 @@ export class TaskFormComponent implements OnInit {
       console.log('Form Submitted', this.taskForm.value);
     }
   }
+
+  calendar() {
+    this.lookupGetByTagNameProjectService.lookupProjectDataGet().subscribe((response: any) => {
+      console.log('Full Project Response:', response);
+      if (response.dataUpdateResponse && response.dataUpdateResponse.status) {
+        this.projects = response.lookupGetByTagNameList;
+        console.log('Formatted Projects:', this.projects);
+        this.changeDetector.detectChanges();
+      }
+      if (response.dataUpdateResponse && response.dataUpdateResponse.status && response.lookupGetByTagNameProjectList) {
+        this.projects = response.lookupGetByTagNameList;
+        console.log('Formatted Projects:', this.projects);
+      }
+    });
+    
+    this.lookupGetByTagNameWorkTypeService.lookupWorkTypeDataGet().subscribe((response: any) => {
+      console.log('Full Work Type Response:', response);
+      if (response.dataUpdateResponse && response.dataUpdateResponse.status) {
+        this.typeofwork = response.lookupGetByTagNameList;
+        console.log('Formatted Work Types:', this.typeofwork);
+        this.changeDetector.detectChanges();
+      }
+      if (response.dataUpdateResponse && response.dataUpdateResponse.status && response.lookupGetByTagNameWorkTypeList) {
+        this.typeofwork = response.lookupGetByTagNameList;
+        console.log('Formatted Work Types:', this.typeofwork);
+      }
+    });
+    
+    
+  };
+
+
 }
