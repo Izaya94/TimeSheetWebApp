@@ -1,11 +1,63 @@
-
-<p-toast position="bottom-right"></p-toast>
-
-<p-fileUpload 
-    mode="basic" 
-    chooseLabel="Choose" 
-    chooseIcon="pi pi-upload"
-    name="demo[]" 
-    url="https://www.primefaces.org/cdn/api/upload.php" 
-    accept="image/*" 
-    maxFileSize="1000000"  />
+<!-- <form (ngSubmit)="submitForm()">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label for="workDate">Selected Date</label>
+        <p>{{ selectedDate | date: "dd-MMM-yyyy" }}</p>
+      </div>
+      <div style="margin-bottom: 20px"></div>
+      <div class="p-field flex-auto">
+        <label for="projectTitle">Project Title</label>
+        <div style="margin-bottom: 12px"></div>
+        <p-dropdown id="projectTitle" [(ngModel)]="projectTitle" [options]="projects" optionLabel="keyData" placeholder="Select a Project" name="projectTitle"></p-dropdown>
+      </div>
+      <div style="margin-bottom: 20px"></div>
+      <div class="p-field flex-auto">
+        <label for="workType">Work Type</label>
+        <div style="margin-bottom: 12px"></div>
+        <p-dropdown id="workType" [(ngModel)]="workType" [options]="typeofwork" optionLabel="keyData" placeholder="Select a Work Type" name="workType"></p-dropdown>
+      </div>
+      <div style="margin-bottom: 20px"></div>
+      <div class="p-field flex-auto">
+        <label for="description">Description (Optional)</label>
+        <div style="margin-bottom: 12px"></div>
+        <input type="text" pInputText [(ngModel)]="description" placeholder="Enter Description Here" name="description" />
+      </div>
+      <div style="margin-bottom: 20px"></div>
+      <div class="p-field-checkbox">
+        <div class="checkbox-wrapper" (click)="toggleEnterHours()">
+          <p-checkbox id="enterHours" [(ngModel)]="enterHours" binary="true" name="enterHours"></p-checkbox>
+          <label for="enterHours">Enter hours instead of start and end time(s).</label>
+        </div>
+      </div>
+      <div style="margin-bottom: 20px"></div>
+      <div *ngIf="enterHours">
+        <div class="p-field">
+          <label for="workHours">Work Hours</label>
+          <div style="margin-bottom: 12px"></div>
+          <input type="number" id="workHours" pInputText [(ngModel)]="workHours" min="1" name="workHours">
+        </div>
+      </div>
+      <div style="margin-bottom: 20px"></div>
+      <div *ngIf="!enterHours">
+        <div class="p-field flex-auto">
+          <div style="display: flex; justify-content: space-between">
+            <div style="margin-right: 10px">
+              <label for="workStart">Start Time</label>
+              <div style="margin-bottom: 12px"></div>
+              <p-calendar id="workStart" [(ngModel)]="workStart" [showTime]="true" [hourFormat]="'12'" [timeOnly]="true" stepMinute="30" [readonlyInput]="true" name="workStart"></p-calendar>
+            </div>
+            <div>
+              <label for="workEnd">End Time</label>
+              <div style="margin-bottom: 12px"></div>
+              <p-calendar id="workEnd" [(ngModel)]="workEnd" [showTime]="true" [hourFormat]="'12'" [timeOnly]="true" stepMinute="30" [readonlyInput]="true" name="workEnd"></p-calendar>
+            </div>
+          </div>
+        </div>
+        <div style="margin-bottom: 20px"></div>
+      </div>
+      <div class="p-field">
+        <button pButton type="submit" label="Add Work"></button>
+      </div>
+    </div>
+  </form>
+   -->

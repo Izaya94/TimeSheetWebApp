@@ -36,8 +36,8 @@ import { LookupGetByTagNameWorkTypeService } from '../../services/LookupServices
 import { LookupGetByTagNameProjectService } from '../../services/LookupServices/lookup-get-by-tag-name-project.service';
 import { ILookupGetByTagNameProjectList } from '../../interfaces/Lookup Master/Lookup-GetByTagName-Project';
 import { ILookupGetByTagNameWorkTypeList } from '../../interfaces/Lookup Master/Lookup-GetByTagName-WorkType';
-import { HttpClient } from '@angular/common/http';
-
+import { IEmployeeCalendarDTOList } from '../../interfaces/EmployeeCalendar/EmployeeCalendarList';
+import { __values } from 'tslib';
 @Component({
   selector: 'app-calendar',
   standalone: true,
@@ -62,44 +62,23 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
   visible: boolean = false;
   maximizable: boolean = true;
-  workType: ILookupGetByTagNameProjectList[] | null = null;
+  employee!:IEmployeeCalendarDTOList[];
+  workType: ILookupGetByTagNameWorkTypeList[] | null = null;
   projectTitle: ILookupGetByTagNameProjectList[] | null = null;
   projects!: ILookupGetByTagNameProjectList[];
-  typeofwork!: ILookupGetByTagNameProjectList[];
+  typeofwork!: ILookupGetByTagNameWorkTypeList[];
   workStart: Date = new Date();
   workEnd: Date = new Date();
   selectedDate: string = '';
   description: string = '';
   calendarVisible = signal(true);
-  calendarOptions = signal<CalendarOptions>({
-    plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
-    headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
-    },
-    initialView: 'dayGridMonth',
-    // initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
-    weekends: true,
-    editable: true,
-    selectable: true,
-    selectMirror: true,
-    dayMaxEvents: true,
-    select: this.handleDateSelect.bind(this),
-    eventClick: this.handleEventClick.bind(this),
-    eventsSet: this.handleEvents.bind(this),
-    /* you can update a remote database when these fire:
-    eventAdd:
-    eventChange:
-    eventRemove:
-    */
-  });
+  
   currentEvents: EventApi[] = [];
   enterHours: boolean = false;
   workHours: number = 1;
+  calendarOptions: any;
 
   constructor(
-    private http: HttpClient,
     private changeDetector: ChangeDetectorRef,
     private messageService: MessageService,
     private lookupGetByTagNameWorkTypeService: LookupGetByTagNameWorkTypeService,
@@ -107,18 +86,45 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   ) {}
   ngOnInit() {
     this.calendar();
+    this.calendarOptions = signal<CalendarOptions>({
+      plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+      },
+      initialView: 'dayGridMonth',
+      // initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
+      // weekends: true,
+      editable: true,
+      selectable: true,
+      events:this.projects,
+      // selectMirror: true,
+      // dayMaxEvents: true,
+  
+      select: this.handleDateSelect.bind(this),
+      eventClick: this.handleEventClick.bind(this),
+      eventsSet: this.handleEvents.bind(this),
+      /* you can update a remote database when these fire:
+      eventAdd:
+      eventChange:
+      eventRemove:
+      */
+    });
+    console.log(this.projects);
+
   }
 
   handleCalendarToggle() {
     this.calendarVisible.update((bool) => !bool);
   }
 
-  handleWeekendsToggle() {
-    this.calendarOptions.update((options) => ({
-      ...options,
-      weekends: !options.weekends,
-    }));
-  }
+  // handleWeekendsToggle() {
+  //   this.calendarOptions.update((options) => ({
+  //     ...options,
+  //     weekends: !options.weekends,
+  //   }));
+  // }
 
   handleDateSelect(selectInfo: DateSelectArg) {
     this.selectedDate = selectInfo.startStr;
@@ -137,9 +143,11 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   addWork() {
     console.log('Project Title:', this.projectTitle);
     console.log('Work Type:', this.workType);
-    console.log('Description', this.description);
     console.log('Work Start:', this.workStart);
     console.log('Work End:', this.workEnd);
+    console.log('Description:', this.description);
+    console.log('Total Hours: ', this.workHours);
+    console.log('Enter Hours: ', this.enterHours);
 
     if (!this.calendarComponent) {
       console.error('CalendarComponent is not available.');
@@ -175,6 +183,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
         start: this.workStart,
         end: this.workEnd,
         allDay: false,
+        title: this.description
       });
       this.visible = false;
       this.projectTitle = null;
@@ -196,6 +205,12 @@ export class CalendarComponent implements OnInit, AfterViewInit {
         detail: 'Please fill in all required fields.',
       });
     }
+    let currproject = this.projects;
+    const projectString = JSON.stringify(currproject);
+    
+    // console.log(projectString);
+    console.log(projectString.slice(46,50));
+
   }
 
   resetForm() {
@@ -246,6 +261,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     } else {
       console.log('CalendarComponent initialized successfully.');
     }
+    console.log(this.projects);
   }
 
   lookupGetByTagNameProjectListGet(lookupGetByTagNameProjectList: ILookupGetByTagNameProjectList[]) {
@@ -286,35 +302,20 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     
   };
   
-
-  submitForm(){
-    const formData = {
-      projectTitle: this.projectTitle,
-      workType: this.workType,
-      description: this.description,
-      workStart: this.workStart,
-      workEnd: this.workEnd,
-      workHours: this.workHours,
-      selectedDate: this.projectTitle,
+  getEventTitle(event: EventApi): string {
+    console.log(event.toJSON());
+    if (!event.extendedProps || !event.extendedProps['keyValue']) {
+      return 'No title available';
     }
-
-    this.http.post('https://your-api-endpoint.com/submit-work', formData).subscribe(
-      (response) => {
-        console.log('Form submitted successfully:', response);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Work added successfully.',
-        });
-      },
-      (error) => {
-        console.error('Error submitting form:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to add work.',
-        });
-      }
-    );
+  
+    const tags = event.extendedProps['keyValue'] as ILookupGetByTagNameProjectList[];
+    if (tags.length === 0) {
+      return 'No title available';
+    }
+  
+    // Assuming each tag object has a `tagName` property
+    return tags.map(tag => tag.tagName).join(', ');
   }
+  
+
 }

@@ -52,10 +52,8 @@ import { ILookupGetByTagNameDesignationList } from '../../interfaces/Lookup Mast
 })
 export class RegisterComponent implements OnInit {
   constructor(
-    private roleService: RoleService,
-    private authService: AuthService,
     private lookupGetByTagNameDesignationService: LookupGetByTagNameDesignationService,
-	private changeDetector: ChangeDetectorRef,
+	  private changeDetector: ChangeDetectorRef,
   ) {}
 
   designation!: ILookupGetByTagNameDesignationList[] | null;

@@ -29,7 +29,7 @@
         <label for="workType">Description (Optional)</label>
         <div style="margin-bottom: 12px"></div>
         <!-- <input id="workType" type="text" pInputText [(ngModel)]="workType"> -->
-        <input type="text" pInputText  placeholder="Enter Description Here" />
+        <input type="text" pInputText [(ngModel)]="description" placeholder="Enter Description Here" />
       </div>
       <div style="margin-bottom: 20px"></div>
 
@@ -80,9 +80,9 @@
     <b>{{ group.date }}</b>
     <br />
     <div *ngFor="let event of group.events">
-      <i>{{ event.title }}</i>
+      <!-- <i>{{ getEventTitle(event) }} - {{ event.startStr }}</i> -->
+      <i>{{ event.title}}</i>
     </div>
   </li>
 </ul>
-
 <full-calendar #calendar *ngIf="calendarVisible()" [options]="calendarOptions()"></full-calendar>
