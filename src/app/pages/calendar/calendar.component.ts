@@ -63,8 +63,8 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   visible: boolean = false;
   maximizable: boolean = true;
   employee!:IEmployeeCalendarDTOList[];
-  workType: ILookupGetByTagNameWorkTypeList[] | null = null;
-  projectTitle: ILookupGetByTagNameProjectList[] | null = null;
+  workType: ILookupGetByTagNameWorkTypeList | null = null;
+  projectTitle: ILookupGetByTagNameProjectList | null = null;
   projects!: ILookupGetByTagNameProjectList[];
   typeofwork!: ILookupGetByTagNameWorkTypeList[];
   workStart: Date = new Date();
@@ -179,12 +179,25 @@ export class CalendarComponent implements OnInit, AfterViewInit {
           (eventEnd.getTime() - eventStart.getTime()) / (1000 * 60 * 60);
       }
 
+      // let currproject = this.projects;
+      // const projectString = JSON.stringify(currproject);
+      // let testprojecttitle = projectString.slice(46,50);
+      // console.log(projectString);
+      // console.log(projectString.slice(46,50));
+
+    
+      // console.log('Work Types:', this.workType); // Check if the array is populated
+      // const selectedWorkType = this.workType;
+      // console.log('Selected Work Type:', selectedWorkType);
+
       calendarApi.addEvent({
         start: this.workStart,
         end: this.workEnd,
         allDay: false,
-        title: this.description
+        title: this.projectTitle.keyData + ' : ' + this.workType.keyData
       });
+
+
       this.visible = false;
       this.projectTitle = null;
       this.workType = null;
@@ -205,11 +218,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
         detail: 'Please fill in all required fields.',
       });
     }
-    let currproject = this.projects;
-    const projectString = JSON.stringify(currproject);
-    
-    // console.log(projectString);
-    console.log(projectString.slice(46,50));
+
 
   }
 
