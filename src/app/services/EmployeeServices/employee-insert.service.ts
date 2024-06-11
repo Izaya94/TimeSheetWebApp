@@ -15,6 +15,7 @@ export class EmployeeInsertService {
   constructor(private http: HttpClient) { }
 
   insertEmployeeData(record: any): Observable<IEmployeeDTOAdd> {
+    console.log(record);
     return this.http.post<IEmployeeDTOAdd>(`${this.apiUrl}Employee/add`, record)
   }
 }

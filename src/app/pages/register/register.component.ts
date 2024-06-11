@@ -24,6 +24,8 @@ import { IRole } from '../../interfaces/role';
 import { AuthService } from '../../services/auth.service';
 import { LookupGetByTagNameDesignationService } from '../../services/LookupServices/lookup-get-by-tag-name-designation.service';
 import { ILookupGetByTagNameDesignationList } from '../../interfaces/Lookup Master/Lookup-GetByTagName-Designation';
+import { EmployeeInsertService } from '../../services/EmployeeServices/employee-insert.service';
+import { EmployeeDTOAdd, IEmployeeDTOAdd } from '../../interfaces/Employee/EmployeeInsert';
 
 @Component({
   selector: 'app-register',
@@ -54,6 +56,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private lookupGetByTagNameDesignationService: LookupGetByTagNameDesignationService,
 	  private changeDetector: ChangeDetectorRef,
+    private employeeInsertService: EmployeeInsertService
   ) {}
 
   designation!: ILookupGetByTagNameDesignationList[] | null;
@@ -67,7 +70,8 @@ export class RegisterComponent implements OnInit {
       birthDate: ['', [Validators.required]],
       contactNumber: ['', [Validators.required]],
       homeNumber: [''],
-      email: ['', [Validators.required, Validators.email]],
+      email1: ['', [Validators.required, Validators.email]],
+      email2: ['', [Validators.email]],
       joinDate: ['', [Validators.required]],
       designation: ['', [Validators.required]],
     });
@@ -94,7 +98,38 @@ export class RegisterComponent implements OnInit {
     this.designation = lookupGetByTagName;
   }
 
-  onSubmit() {
+  onSubmit(): void {
+    // this.registerForm.value.designation = this.designation.keyValue;
     console.log(this.registerForm.value);
+    const formValue = this.registerForm.value;
+    if(this.registerForm.valid){
+      const selectedDesignation = this.designation!.find(
+        designation => designation.keyData === formValue.designation.keyData
+      );    
+      
+      const employeeDTOAdd: EmployeeDTOAdd = {
+        EmployeeName: formValue.fullName,
+        BirthDate: formValue.birthDate,
+        ContactNumber1: formValue.contactNumber,
+        ContactNumber2: formValue.homeNumber,
+        Email1: formValue.email1,
+        Email2: formValue.email2,
+        JoinedOn: formValue.joinDate,
+        DesignationId: selectedDesignation!.keyValue,
+      };
+
+      // const employeeDTOAdd: EmployeeDTOAdd = this.registerForm.value;
+      this.employeeInsertService.insertEmployeeData(employeeDTOAdd).subscribe({
+        next:(response: IEmployeeDTOAdd) => {
+          console.log('Employee added', response);
+        },
+        error: (error: any) => {
+          console.log('Error', error);
+        },
+        complete: () => {
+          console.log('Request complete');
+        }
+      });
+    }
   }
 }

@@ -1,12 +1,12 @@
 import { IDataUpdateResponse } from "../shared/data-update-response";
-import { IEmployeeCalendarDetailDTOResponse } from "./EmployeeCalendarDetail";
+import { IEmployeeCalendarDTODetail, IEmployeeCalendarDetailDTOResponse } from "./EmployeeCalendarDetail";
 
 export interface IEmployeeCalendarAdd {
     "dataUpdateResponse" : IDataUpdateResponse,
-    "employeeCalendarDetail" : IEmployeeCalendarDetailDTOResponse,
+    "employeeCalendarDetail" : IEmployeeCalendarDTODetail,
 }
 
-export interface IEmployeeCalendarAddDTOResponse
+export interface EmployeeCalendarDTOAdd
 {
     "CalendarId" : number,
     "ProjectId" : number,

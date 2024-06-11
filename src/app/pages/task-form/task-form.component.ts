@@ -38,7 +38,7 @@ export class TaskFormComponent implements OnInit {
     this.taskForm = this.fb.group({
       projectName: ['', Validators.required],
       typeOfWork: ['', Validators.required],
-      designation: [''],
+      description: [''],
       startTime: [null, Validators.required],
       endTime: [null, Validators.required],
       totalHours: [{ value: 0, disabled: true }]
@@ -51,6 +51,8 @@ export class TaskFormComponent implements OnInit {
     this.taskForm.get('startTime')?.valueChanges.subscribe(() => {
       this.calculateTotalHours();
     });
+
+    this.taskformget();
   }
 
   calculateTotalHours() {
@@ -74,7 +76,7 @@ export class TaskFormComponent implements OnInit {
     }
   }
 
-  calendar() {
+  taskformget() {
     this.lookupGetByTagNameProjectService.lookupProjectDataGet().subscribe((response: any) => {
       console.log('Full Project Response:', response);
       if (response.dataUpdateResponse && response.dataUpdateResponse.status) {

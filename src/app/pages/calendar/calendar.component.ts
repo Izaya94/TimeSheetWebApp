@@ -38,6 +38,7 @@ import { ILookupGetByTagNameProjectList } from '../../interfaces/Lookup Master/L
 import { ILookupGetByTagNameWorkTypeList } from '../../interfaces/Lookup Master/Lookup-GetByTagName-WorkType';
 import { IEmployeeCalendarDTOList } from '../../interfaces/EmployeeCalendar/EmployeeCalendarList';
 import { __values } from 'tslib';
+import { EmployeeCalendarDTOAdd } from '../../interfaces/EmployeeCalendar/EmployeeCalendarInsert';
 @Component({
   selector: 'app-calendar',
   standalone: true,
@@ -218,6 +219,18 @@ export class CalendarComponent implements OnInit, AfterViewInit {
         detail: 'Please fill in all required fields.',
       });
     }
+    
+    // const employeeCalendarDTOAdd: EmployeeCalendarDTOAdd = {
+    //   CalendarId : this.selectedDate,
+    //   ProjectId : this.projectTitle!.keyValue,
+    //   WorkTypeId : this.workType!.keyValue,
+    //   StartTime : this.workStart,
+    //   EndTime : this.workEnd,
+    //   TotalTime : this.workHours,
+    //   Description : this.description
+    // };
+
+
 
 
   }
@@ -311,20 +324,20 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     
   };
   
-  getEventTitle(event: EventApi): string {
-    console.log(event.toJSON());
-    if (!event.extendedProps || !event.extendedProps['keyValue']) {
-      return 'No title available';
-    }
+  // getEventTitle(event: EventApi): string {
+  //   console.log(event.toJSON());
+  //   if (!event.extendedProps || !event.extendedProps['keyValue']) {
+  //     return 'No title available';
+  //   }
   
-    const tags = event.extendedProps['keyValue'] as ILookupGetByTagNameProjectList[];
-    if (tags.length === 0) {
-      return 'No title available';
-    }
+  //   const tags = event.extendedProps['keyValue'] as ILookupGetByTagNameProjectList[];
+  //   if (tags.length === 0) {
+  //     return 'No title available';
+  //   }
   
-    // Assuming each tag object has a `tagName` property
-    return tags.map(tag => tag.tagName).join(', ');
-  }
+  //   // Assuming each tag object has a `tagName` property
+  //   return tags.map(tag => tag.tagName).join(', ');
+  // }
   
 
 }

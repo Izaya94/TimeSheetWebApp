@@ -2,8 +2,8 @@ import { IDataUpdateResponse } from "../shared/data-update-response";
 
 
 export interface IEmployeeCalendarDetailDTOResponse{
-    "employeeCalendarDetail": IEmployeeCalendarDTODetail,
-    "dataUpdateResponse": IDataUpdateResponse
+    "dataUpdateResponse": IDataUpdateResponse,
+    "employeeCalendarDetail": IEmployeeCalendarDTODetail
 }
 
 
