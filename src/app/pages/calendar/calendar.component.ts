@@ -38,7 +38,8 @@ import { ILookupGetByTagNameProjectList } from '../../interfaces/Lookup Master/L
 import { ILookupGetByTagNameWorkTypeList } from '../../interfaces/Lookup Master/Lookup-GetByTagName-WorkType';
 import { IEmployeeCalendarDTOList } from '../../interfaces/EmployeeCalendar/EmployeeCalendarList';
 import { __values } from 'tslib';
-import { EmployeeCalendarDTOAdd } from '../../interfaces/EmployeeCalendar/EmployeeCalendarInsert';
+import { EmployeeCalendarDTOAdd, IEmployeeCalendarDTOAdd } from '../../interfaces/EmployeeCalendar/EmployeeCalendarInsert';
+import { EmployeeCalendarInsertService } from '../../services/EmployeeCalendarServices/employee-calendar-insert.service';
 @Component({
   selector: 'app-calendar',
   standalone: true,
@@ -70,7 +71,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   typeofwork!: ILookupGetByTagNameWorkTypeList[];
   workStart: Date = new Date();
   workEnd: Date = new Date();
-  selectedDate: string = '';
+  selectedDate: Date = new Date();
   description: string = '';
   calendarVisible = signal(true);
   
@@ -83,7 +84,8 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     private changeDetector: ChangeDetectorRef,
     private messageService: MessageService,
     private lookupGetByTagNameWorkTypeService: LookupGetByTagNameWorkTypeService,
-    private lookupGetByTagNameProjectService: LookupGetByTagNameProjectService
+    private lookupGetByTagNameProjectService: LookupGetByTagNameProjectService,
+    private employeeCalendarInsertService: EmployeeCalendarInsertService
   ) {}
   ngOnInit() {
     this.calendar();
@@ -128,7 +130,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   // }
 
   handleDateSelect(selectInfo: DateSelectArg) {
-    this.selectedDate = selectInfo.startStr;
+    this.selectedDate = new Date(selectInfo.startStr);
 
     this.workStart = new Date(selectInfo.startStr);
     this.workStart.setHours(new Date().getHours());
@@ -204,7 +206,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       this.workType = null;
       this.workStart = new Date();
       this.workEnd = new Date();
-      this.selectedDate = '';
+      this.selectedDate = new Date();
 
       this.messageService.add({
         severity: 'success',
@@ -220,15 +222,43 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       });
     }
     
-    // const employeeCalendarDTOAdd: EmployeeCalendarDTOAdd = {
-    //   CalendarId : this.selectedDate,
-    //   ProjectId : this.projectTitle!.keyValue,
-    //   WorkTypeId : this.workType!.keyValue,
-    //   StartTime : this.workStart,
-    //   EndTime : this.workEnd,
-    //   TotalTime : this.workHours,
-    //   Description : this.description
-    // };
+    const selectedProject = this.projects!.find(
+      projects => projects.keyData
+    );  
+
+    const selectedWorkType = this.typeofwork!.find(
+      typeofwork => typeofwork.keyData
+    );  
+     
+    // const utcDateTimeStringCalendarDate = this.selectedDate.toISOString();
+    // const utcDateTimeStringStartTime = this.workStart.toISOString();
+    // const utcDateTimeStringEndTime = this.workEnd.toISOString();
+
+    const localCalendarDate = new Date(this.selectedDate.getTime() - this.selectedDate.getTimezoneOffset() * 60000);
+    const localStartTime = new Date(this.selectedDate.getTime() - this.selectedDate.getTimezoneOffset() * 60000);
+    const localEndTime = new Date(this.selectedDate.getTime() - this.selectedDate.getTimezoneOffset() * 60000);
+
+    const employeeCalendarDTOAdd: EmployeeCalendarDTOAdd = {
+      CalendarDate : localCalendarDate,
+      ProjectId : selectedProject!.keyValue,
+      WorkTypeId : selectedWorkType!.keyValue,
+      StartTime : localStartTime,
+      EndTime : localEndTime,
+      TotalTime : this.workHours,
+      Description : this.description
+    };
+
+    this.employeeCalendarInsertService.insertEmployeeCalendarData(employeeCalendarDTOAdd).subscribe({
+      next:(response: IEmployeeCalendarDTOAdd) => {
+        console.log('Employee added', response);
+      },
+      error: (error: any) => {
+        console.log('Error', error);
+      },
+      complete: () => {
+        console.log('Request complete');
+      }
+    });
 
 
 
@@ -240,7 +270,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     this.workType = null;
     this.workStart = new Date();
     this.workEnd = new Date();
-    this.selectedDate = '';
+    this.selectedDate = new Date();
     this.workHours = 1;
     this.enterHours = false;
     this.description = '';

@@ -6,9 +6,10 @@ export interface IEmployeeCalendarDTOEdit{
     "employeeCalendarDetail" : IEmployeeCalendarDetailDTOResponse
 }
 
-export interface EmployeeCalendarDTOEdit{
+export interface EmployeeCalendarDTOEdit
+{
     "EmployeeCalendarId": number,
-    "CalendarId": number,
+    "CalendarDate": Date,
     "ProjectId": number,
     "WorkTypeId": number,
     "StartTime": number,
