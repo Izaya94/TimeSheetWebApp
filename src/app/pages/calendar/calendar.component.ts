@@ -202,11 +202,11 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
 
       this.visible = false;
-      this.projectTitle = null;
-      this.workType = null;
-      this.workStart = new Date();
-      this.workEnd = new Date();
-      this.selectedDate = new Date();
+      // this.projectTitle = null;
+      // this.workType = null;
+      // this.workStart = new Date();
+      // this.workEnd = new Date();
+      // this.selectedDate = new Date();
 
       this.messageService.add({
         severity: 'success',
@@ -222,31 +222,33 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       });
     }
     
-    const selectedProject = this.projects!.find(
-      projects => projects.keyData
-    );  
+    // const selectedProject = this.projects!.find(
+    //   projects => projects.keyData
+    // );  
 
-    const selectedWorkType = this.typeofwork!.find(
-      typeofwork => typeofwork.keyData
-    );  
+    // const selectedWorkType = this.typeofwork!.find(
+    //   typeofwork => typeofwork.keyData
+    // );  
      
     // const utcDateTimeStringCalendarDate = this.selectedDate.toISOString();
     // const utcDateTimeStringStartTime = this.workStart.toISOString();
     // const utcDateTimeStringEndTime = this.workEnd.toISOString();
 
     const localCalendarDate = new Date(this.selectedDate.getTime() - this.selectedDate.getTimezoneOffset() * 60000);
-    const localStartTime = new Date(this.selectedDate.getTime() - this.selectedDate.getTimezoneOffset() * 60000);
-    const localEndTime = new Date(this.selectedDate.getTime() - this.selectedDate.getTimezoneOffset() * 60000);
+    const localStartTime = new Date(this.workStart.getTime() - this.workStart.getTimezoneOffset() * 60000);
+    const localEndTime = new Date(this.workEnd.getTime() - this.workEnd.getTimezoneOffset() * 60000);
 
     const employeeCalendarDTOAdd: EmployeeCalendarDTOAdd = {
       CalendarDate : localCalendarDate,
-      ProjectId : selectedProject!.keyValue,
-      WorkTypeId : selectedWorkType!.keyValue,
+      ProjectId : this.projectTitle!.keyValue,
+      WorkTypeId : this.workType!.keyValue,
       StartTime : localStartTime,
       EndTime : localEndTime,
       TotalTime : this.workHours,
       Description : this.description
     };
+
+    console.log(employeeCalendarDTOAdd);
 
     this.employeeCalendarInsertService.insertEmployeeCalendarData(employeeCalendarDTOAdd).subscribe({
       next:(response: IEmployeeCalendarDTOAdd) => {
