@@ -1,20 +1,21 @@
 import { IDataUpdateResponse } from "../shared/data-update-response";
 
-export interface IEmployeeCalendarDTOList{
-    "dataUpdateResponse" : IDataUpdateResponse,
-    "employeeCalendarDTOList": IEmployeeCalendarDTOList
+export interface IEmployeeCalendarDTOResponse {
+    dataUpdateResponse: IDataUpdateResponse | null;
+    employeeCalendarList: IEmployeeCalendarDTOList[];
 }
 
-export interface IEmployeeCalendarDTOList{
-    "EmployeeCalendarId" : number,
-    "CalendarId": number,
-    "Date": string,
-    "ProjectId": number,
-    "Project": string,
-    "WorkTypeId": number,
-    "WorkType": string,
-    "StartTime": number,
-    "EndTime": number,
-    "TotalTime": number,
-    "Description": string
+export interface IEmployeeCalendarDTOList {
+    employeeCalendarId: number;
+    calendarId: number;
+    date: Date;
+    projectId: number;
+    project: string;
+    workTypeId: number;
+    workType: string;
+    title: string;
+    startTime: string;
+    endTime: string;
+    totalTime: number;
+    description: string;
 }

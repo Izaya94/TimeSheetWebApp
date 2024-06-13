@@ -74,15 +74,15 @@
     </div>
   </p-dialog>
 </div>
-
+<!-- 
 <ul>
   <li *ngFor="let group of groupedEvents">
     <b>{{ group.date }}</b>
     <br />
     <div *ngFor="let event of group.events">
-      <!-- <i>{{ getEventTitle(event) }} - {{ event.startStr }}</i> -->
+      <i>{{ getEventTitle(event) }} - {{ event.startStr }}</i>
       <i>{{ event.title}}</i>
     </div>
   </li>
-</ul>
-<full-calendar #calendar *ngIf="calendarVisible()" [options]="calendarOptions()"></full-calendar>
+</ul> -->
+<full-calendar #calendar *ngIf="calendarVisible()" [options]="calendarOptions()" [events]="employeeCalendarWorkList"></full-calendar>

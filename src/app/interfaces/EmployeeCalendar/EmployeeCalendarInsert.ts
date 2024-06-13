@@ -14,5 +14,6 @@ export interface EmployeeCalendarDTOAdd
     "StartTime" : Date,
     "EndTime" : Date,
     "TotalTime" : number,
-    "Description" : string
+    "Description" : string,
+    // "Timezone" : string
 }
