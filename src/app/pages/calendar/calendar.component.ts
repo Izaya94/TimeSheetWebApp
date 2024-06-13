@@ -105,9 +105,8 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     // console.log(timezone);
     // this.fetchCalendarData(timezone);
 
-    this.employeeCalendarListService.getEmployeeCalendarList().subscribe(data=>{
-      debugger
-      this.employeeCalendarWorkList=data.employeeCalendarList;
+    this.employeeCalendarListService.getEmployeeCalendarList().subscribe(data=> {
+      this.employeeCalendarWorkList = data.employeeCalendarList;
       console.log(this.employeeCalendarWorkList);
     });
 
@@ -253,29 +252,14 @@ export class CalendarComponent implements OnInit, AfterViewInit {
           (eventEnd.getTime() - eventStart.getTime()) / (1000 * 60 * 60);
       }
 
-      // let currproject = this.projects;
-      // const projectString = JSON.stringify(currproject);
-      // let testprojecttitle = projectString.slice(46,50);
-      // console.log(projectString);
-      // console.log(projectString.slice(46,50));
-
-      // console.log('Work Types:', this.workType); // Check if the array is populated
-      // const selectedWorkType = this.workType;
-      // console.log('Selected Work Type:', selectedWorkType);
-
       calendarApi.addEvent({
         start: this.workStart,
         end: this.workEnd,
         allDay: false,
-        title: this.projectTitle.keyData + ' : ' + this.workType.keyData,
+        title: this.projectTitle.keyData + ' : ' + this.workType.keyData + ' for ' + this.workHours + ' Hours(s)' ,
       });
 
       this.visible = false;
-      // this.projectTitle = null;
-      // this.workType = null;
-      // this.workStart = new Date();
-      // this.workEnd = new Date();
-      // this.selectedDate = new Date();
 
       this.messageService.add({
         severity: 'success',
@@ -289,14 +273,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
         detail: 'Please fill in all required fields.',
       });
     }
-
-    // const selectedProject = this.projects!.find(
-    //   projects => projects.keyData
-    // );
-
-    // const selectedWorkType = this.typeofwork!.find(
-    //   typeofwork => typeofwork.keyData
-    // );
 
     // const utcDateTimeStringCalendarDate = this.selectedDate.toISOString();
     // const utcDateTimeStringStartTime = this.workStart.toISOString();
@@ -334,6 +310,11 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       });
   }
 
+  editWork(event: any){
+      console.log(event);
+
+  }
+
   resetForm() {
     this.projectTitle = null;
     this.workType = null;
@@ -350,13 +331,23 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   }
 
   handleEventClick(clickInfo: EventClickArg) {
-    if (
-      confirm(
-        `Are you sure you want to delete the event '${clickInfo.event.title}'`
-      )
-    ) {
-      clickInfo.event.remove();
+    const clickedEvent = this.employeeCalendarWorkList.find(event => event.employeeCalendarId === clickInfo.event.extendedProps['employeeCalendarId']);
+    this.editWork(clickedEvent);
+    if (clickedEvent) {
+      // Populate form fields with event data
+      this.projectTitle = this.projects.find(project => project.keyValue === clickedEvent.projectId) || null;
+      this.workType = this.typeofwork.find(workType => workType.keyValue === clickedEvent.workTypeId) || null;
+      this.workStart = new Date(clickedEvent.startTime);
+      this.workEnd = new Date(clickedEvent.endTime);
+      this.selectedDate = new Date(clickedEvent.startTime);
+      this.description = clickedEvent.description || '';
+      this.workHours = clickedEvent.totalTime;
+      this.enterHours = !!clickedEvent.totalTime;
+      
+      // Show the dialog with pre-filled data
+      this.visible = true;
     }
+
   }
 
   handleEvents(events: EventApi[]) {
@@ -452,3 +443,5 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   //   return tags.map(tag => tag.tagName).join(', ');
   // }
 }
+
+
