@@ -9,6 +9,7 @@ import { ToastDemoComponent } from './pages/toast-demo/toast-demo.component';
 import { TaskFormComponent } from './pages/task-form/task-form.component';
 import { TaskForm1Component } from './pages/task-form-1/task-form-1.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
+import { authGuard } from './services/auth.guard';
 
 export const routes: Routes = [
     {
@@ -26,6 +27,7 @@ export const routes: Routes = [
     {
         path:'register',
         component: RegisterComponent,
+        canActivate: [authGuard], data: { roles: ['Admin'] } 
     },
     {
         path: 'about',
@@ -43,13 +45,16 @@ export const routes: Routes = [
     {
         path: 'task-form',
         component: TaskFormComponent,
+        canActivate: [authGuard], data: { roles: ['Admin', 'User'] } 
     },
     {
         path: 'task-form-1',
         component: TaskForm1Component,
+        canActivate: [authGuard], data: { roles: ['Admin', 'User'] } 
     },
     {
         path: 'calendar',
         component: CalendarComponent,
+        canActivate: [authGuard], data: { roles: ['Admin', 'User'] } 
     }
 ];

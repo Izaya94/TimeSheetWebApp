@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { LoginRequest } from '../interfaces/login-request';
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { AuthResponse } from '../interfaces/auth-response';
 import { HttpClient } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
@@ -13,16 +13,22 @@ import { IEmployeeDTOAdd } from '../interfaces/Employee/EmployeeInsert';
 export class AuthService {
   apiUrl: string = environment.apiUrl;
   private tokenKey = 'token';
+  private currentUserSubject: BehaviorSubject<any | null>;
+  public currentUser: Observable<any | null>;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this.currentUserSubject = new BehaviorSubject<any | null>(this.getUserDetail());
+    this.currentUser = this.currentUserSubject.asObservable();
+  }
 
   login(data: LoginRequest): Observable<AuthResponse> {
     return this.http
       .post<AuthResponse>(`${this.apiUrl}Account/login`, data)
       .pipe(
         map((response) => {
-          if (response.flag == true) {
+          if (response.flag) {
             localStorage.setItem(this.tokenKey, response.token);
+            this.currentUserSubject.next(this.getUserDetail());
           }
           return response;
         })
@@ -34,7 +40,7 @@ export class AuthService {
     .post<AuthResponse>(`${this.apiUrl}Employee/add`, data);
   }
 
-  getUserDetail = () => {
+  getUserDetail(): any | null {
     const token = this.getToken();
     if(!token) return null;
     const decodedToken:any = jwtDecode(token);
@@ -48,7 +54,11 @@ export class AuthService {
     return userDetail;
   }
 
-  isLoggedIn = ():boolean => {
+  get currentUserValue(): any | null {
+    return this.currentUserSubject.value;
+  }
+
+  isLoggedIn(): boolean {
     const token = this.getToken();
     if(!token) return false;
     return !this.isTokenExpired();
@@ -65,8 +75,11 @@ export class AuthService {
 
   logout = (): void => {
     localStorage.removeItem(this.tokenKey);
+    this.currentUserSubject.next(null);
   };
 
-  private getToken = (): string | null => localStorage.getItem(this.tokenKey) || '';
+  private getToken(): string | null {
+    return localStorage.getItem(this.tokenKey) || '';
+  } 
 
 }
