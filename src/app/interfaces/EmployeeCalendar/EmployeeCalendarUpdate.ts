@@ -1,9 +1,9 @@
 import { IDataUpdateResponse } from "../shared/data-update-response";
-import { IEmployeeCalendarDetailDTOResponse } from "./EmployeeCalendarDetail";
+import { IEmployeeCalendarDTODetail } from "./EmployeeCalendarDetail";
 
 export interface IEmployeeCalendarDTOEdit{
     "dataUpdateResponse" : IDataUpdateResponse,
-    "employeeCalendarDetail" : IEmployeeCalendarDetailDTOResponse
+    "employeeCalendarDetail" : IEmployeeCalendarDTODetail
 }
 
 export interface EmployeeCalendarDTOEdit
@@ -12,8 +12,8 @@ export interface EmployeeCalendarDTOEdit
     "CalendarDate": Date,
     "ProjectId": number,
     "WorkTypeId": number,
-    "StartTime": number,
-    "EndTime": number,
+    "StartTime": Date,
+    "EndTime": Date,
     "TotalTime": number,
     "Description": string
 }

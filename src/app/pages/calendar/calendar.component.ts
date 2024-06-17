@@ -45,8 +45,9 @@ import {
 import { EmployeeCalendarInsertService } from '../../services/EmployeeCalendarServices/employee-calendar-insert.service';
 import { UserTimezoneService } from '../../services/user-timezone.service';
 import { EmployeeCalendarListService } from '../../services/EmployeeCalendarServices/employee-calendar-list.service';
-import { Title } from '@angular/platform-browser';
 import { IEmployeeCalendarDTOList } from '../../interfaces/EmployeeCalendar/EmployeeCalendarList';
+import { EmployeeCalendarEditService } from '../../services/EmployeeCalendarServices/employee-calendar-edit.service';
+import { EmployeeCalendarDTOEdit, IEmployeeCalendarDTOEdit } from '../../interfaces/EmployeeCalendar/EmployeeCalendarUpdate';
 @Component({
   selector: 'app-calendar',
   standalone: true,
@@ -71,7 +72,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
   visible: boolean = false;
   maximizable: boolean = true;
-  // employee!: IEmployeeCalendarList[];
   workType: ILookupGetByTagNameWorkTypeList | null = null;
   projectTitle: ILookupGetByTagNameProjectList | null = null;
   projects!: ILookupGetByTagNameProjectList[];
@@ -81,14 +81,14 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   workEnd: Date = new Date();
   selectedDate: Date = new Date();
   description: string = '';
+  employeeCalendarId: number = 0;
   calendarVisible = signal(true);
-
+  isEditMode: boolean = false;
   calendarEvents: EventInput[] = [];
   currentEvents: EventApi[] = [];
   enterHours: boolean = false;
   workHours: number = 1;
   calendarOptions: any;
-  // calendarOptions: CalendarOptions = {};
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -97,13 +97,11 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     private lookupGetByTagNameProjectService: LookupGetByTagNameProjectService,
     private employeeCalendarInsertService: EmployeeCalendarInsertService,
     private timezoneService: UserTimezoneService,
-    private employeeCalendarListService: EmployeeCalendarListService
+    private employeeCalendarListService: EmployeeCalendarListService,
+    private employeeCalendarEditService: EmployeeCalendarEditService
   ) {}
   ngOnInit() {
     const timezone = this.timezoneService.getTimezone();
-
-    // console.log(timezone);
-    // this.fetchCalendarData(timezone);
 
     this.employeeCalendarListService.getEmployeeCalendarList().subscribe(data=> {
       this.employeeCalendarWorkList = data.employeeCalendarList;
@@ -121,86 +119,23 @@ export class CalendarComponent implements OnInit, AfterViewInit {
         right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
       },
       initialView: 'dayGridMonth',
-      // initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
-      // weekends: true,
       editable: true,
       selectable: true,
       displayEventTime: false,
-      // selectMirror: true,
-      // dayMaxEvents: true,
       events: this.employeeCalendarWorkList,
       select: this.handleDateSelect.bind(this),
       eventClick: this.handleEventClick.bind(this),
       eventsSet: this.handleEvents.bind(this),
-      /* you can update a remote database when these fire:
-      eventAdd:
-      eventChange:
-      eventRemove:
-      */
+
     });
     
   }
-
-  // fetchCalendarData(timezone: string): void {
-  //   this.employeeCalendarListService
-  //     .getEmployeeCalendarList()
-  //     .subscribe((response: any) => {
-  //       if (response.dataUpdateResponse && response.dataUpdateResponse.status) {
-  //         this.employeeCalendarWorkList = response.employeeCalendarList;
-  //         console.log(
-  //           'Employee Calendar List',
-  //           timezone,
-  //           this.employeeCalendarWorkList
-  //         );
-  //         this.changeDetector.detectChanges();
-  //       }
-  //       if (
-  //         response.dataUpdateResponse &&
-  //         response.dataUpdateResponse.status &&
-  //         response.lookupGetByTagNameProjectList
-  //       ) {
-  //         this.employeeCalendarWorkList = response.employeeCalendarList;
-  //         console.log(
-  //           'Formatted Calendar List:',
-  //           timezone,
-  //           this.employeeCalendarWorkList
-  //         );
-  //       }
-  //     });
-  // }
-
-  // initializeCalendarOptions() {
-  //   this.calendarOptions = {
-  //     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
-  //     headerToolbar:{
-  //       left: 'prev, next today',
-  //       center: 'title',
-  //       right: 'dayGridMonth, timeGridWeek, timeGridDay, listWeek',
-  //     },
-  //     initialView: 'dayGridMonth',
-  //     editable: true,
-  //     selectable: true,
-  //     events: this.employeeCalendarWorkList.map(event => ({
-  //       title: event.Date,
-  //       start: event.StartTime,
-  //       end: event.EndTime
-  //     })),
-  //     select: this.handleDateSelect.bind(this),
-  //     eventClick: this.handleEventClick.bind(this),
-  //     eventsSet: this.handleEvents.bind(this)
-  //   }
-  // }
 
   handleCalendarToggle() {
     this.calendarVisible.update((bool) => !bool);
   }
 
-  // handleWeekendsToggle() {
-  //   this.calendarOptions.update((options) => ({
-  //     ...options,
-  //     weekends: !options.weekends,
-  //   }));
-  // }
+
 
   handleDateSelect(selectInfo: DateSelectArg) {
     this.selectedDate = new Date(selectInfo.startStr);
@@ -214,17 +149,10 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     this.workEnd.setHours(this.workEnd.getHours() + 1);
 
     this.visible = true;
+    this.isEditMode = false;
   }
 
   addWork() {
-    console.log('Project Title:', this.projectTitle);
-    console.log('Work Type:', this.workType);
-    console.log('Work Start:', this.workStart);
-    console.log('Work End:', this.workEnd);
-    console.log('Description:', this.description);
-    console.log('Total Hours: ', this.workHours);
-    console.log('Enter Hours: ', this.enterHours);
-
     if (!this.calendarComponent) {
       console.error('CalendarComponent is not available.');
       return;
@@ -274,14 +202,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       });
     }
 
-    // const utcDateTimeStringCalendarDate = this.selectedDate.toISOString();
-    // const utcDateTimeStringStartTime = this.workStart.toISOString();
-    // const utcDateTimeStringEndTime = this.workEnd.toISOString();
-
-    // const localCalendarDate = new Date(this.selectedDate.getTime() - this.selectedDate.getTimezoneOffset() * 60000);
-    // const localStartTime = new Date(this.workStart.getTime() - this.workStart.getTimezoneOffset() * 60000);
-    // const localEndTime = new Date(this.workEnd.getTime() - this.workEnd.getTimezoneOffset() * 60000);
-
     const employeeCalendarDTOAdd: EmployeeCalendarDTOAdd = {
       CalendarDate: this.selectedDate,
       ProjectId: this.projectTitle!.keyValue,
@@ -290,7 +210,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       EndTime: this.workEnd,
       TotalTime: this.workHours,
       Description: this.description,
-      // Timezone: timezone,
     };
 
     console.log(employeeCalendarDTOAdd);
@@ -300,6 +219,15 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (response: IEmployeeCalendarDTOAdd) => {
           console.log('Employee added', response);
+          this.employeeCalendarListService.getEmployeeCalendarList().subscribe(data => {
+            this.employeeCalendarWorkList = data.employeeCalendarList.map(event => ({
+              ...event,
+              startTime: this.convertUtcToLocal(event.startTime).toISOString(),
+              endTime: this.convertUtcToLocal(event.endTime).toISOString()
+            }));
+            
+            console.log(this.employeeCalendarWorkList);
+      });
         },
         error: (error: any) => {
           console.log('Error', error);
@@ -310,9 +238,101 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       });
   }
 
-  editWork(event: any){
-      console.log(event);
+  editWorkEvent(clickedEvent: any){
+    if (clickedEvent) {
+      this.projectTitle = this.projects.find(project => project.keyValue === clickedEvent.projectId) || null;
+      this.workType = this.typeofwork.find(workType => workType.keyValue === clickedEvent.workTypeId) || null;
+      this.workStart = new Date(clickedEvent.startTime);
+      this.workEnd = new Date(clickedEvent.endTime);
+      this.selectedDate = new Date(clickedEvent.startTime);
+      this.description = clickedEvent.description || '';
+      this.workHours = clickedEvent.totalTime;
+      this.enterHours = !!clickedEvent.totalTime;
+      
+      this.visible = true;
+      this.isEditMode = true;
+    }
+  }
 
+  editWork(){
+    if (this.workHours <= 0) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Hours must be greater than 0.',
+      });
+      return;
+    }
+
+    const calendarApi = this.calendarComponent.getApi();
+    if (this.projectTitle && this.workType && this.workStart && this.workEnd) {
+      let duration = 0;
+      let eventStart = this.workStart;
+      let eventEnd = this.workEnd;
+
+      if (this.enterHours) {
+        duration = this.workHours;
+      } else {
+        duration =
+          (eventEnd.getTime() - eventStart.getTime()) / (1000 * 60 * 60);
+      }
+
+      calendarApi.addEvent({
+        start: this.workStart,
+        end: this.workEnd,
+        allDay: false,
+        title: this.projectTitle.keyData + ' : ' + this.workType.keyData + ' for ' + this.workHours + ' Hours(s)' ,
+      });
+
+      this.visible = false;
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Work added successfully.',
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please fill in all required fields.',
+      });
+    }
+
+    const employeeCalendarDTOEdit: EmployeeCalendarDTOEdit = {
+      EmployeeCalendarId: this.employeeCalendarId,
+      CalendarDate: this.selectedDate,
+      ProjectId: this.projectTitle!.keyValue,
+      WorkTypeId: this.workType!.keyValue,
+      StartTime: this.workStart,
+      EndTime: this.workEnd,
+      TotalTime: this.workHours,
+      Description: this.description,
+    };
+
+    console.log(employeeCalendarDTOEdit);
+
+    this.employeeCalendarEditService
+      .insertEmployeeCalendarData(employeeCalendarDTOEdit)
+      .subscribe({
+        next: (response: IEmployeeCalendarDTOEdit) => {
+          console.log('Employee Calendar Edited', response);
+          this.employeeCalendarListService.getEmployeeCalendarList().subscribe(data=> {
+            this.employeeCalendarWorkList = data.employeeCalendarList;
+            console.log(this.employeeCalendarWorkList);
+          });
+        },
+        error: (error: any) => {
+          console.log('Error', error);
+        },
+        complete: () => {
+          console.log('Request complete');
+        },
+      });
+  }
+
+  deleteWork(){
+    
   }
 
   resetForm() {
@@ -332,22 +352,9 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   handleEventClick(clickInfo: EventClickArg) {
     const clickedEvent = this.employeeCalendarWorkList.find(event => event.employeeCalendarId === clickInfo.event.extendedProps['employeeCalendarId']);
-    this.editWork(clickedEvent);
-    if (clickedEvent) {
-      // Populate form fields with event data
-      this.projectTitle = this.projects.find(project => project.keyValue === clickedEvent.projectId) || null;
-      this.workType = this.typeofwork.find(workType => workType.keyValue === clickedEvent.workTypeId) || null;
-      this.workStart = new Date(clickedEvent.startTime);
-      this.workEnd = new Date(clickedEvent.endTime);
-      this.selectedDate = new Date(clickedEvent.startTime);
-      this.description = clickedEvent.description || '';
-      this.workHours = clickedEvent.totalTime;
-      this.enterHours = !!clickedEvent.totalTime;
-      
-      // Show the dialog with pre-filled data
-      this.visible = true;
-    }
-
+    this.editWorkEvent(clickedEvent);
+    this.employeeCalendarId = clickInfo.event.extendedProps['employeeCalendarId'];
+    this.isEditMode = true;
   }
 
   handleEvents(events: EventApi[]) {
@@ -373,7 +380,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     } else {
       console.log('CalendarComponent initialized successfully.');
     }
-    // console.log(this.projects);
   }
 
   lookupGetByTagNameProjectListGet(
@@ -388,14 +394,16 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     this.typeofwork = lookupGetByTagNameWorkTypeList;
   }
 
+  convertUtcToLocal(utcDateTime: string): Date {
+    return new Date(utcDateTime); // The Date constructor converts UTC string to local time
+  }
+
   calendar() {
     this.lookupGetByTagNameProjectService
       .lookupProjectDataGet()
       .subscribe((response: any) => {
-        // console.log('Full Project Response:', response);
         if (response.dataUpdateResponse && response.dataUpdateResponse.status) {
           this.projects = response.lookupGetByTagNameList;
-          // console.log('Formatted Projects:', this.projects);
           this.changeDetector.detectChanges();
         }
         if (
@@ -411,7 +419,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     this.lookupGetByTagNameWorkTypeService
       .lookupWorkTypeDataGet()
       .subscribe((response: any) => {
-        // console.log('Full Work Type Response:', response);
         if (response.dataUpdateResponse && response.dataUpdateResponse.status) {
           this.typeofwork = response.lookupGetByTagNameList;
           // console.log('Formatted Work Types:', this.typeofwork);
@@ -427,21 +434,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
         }
       });
   }
-
-  // getEventTitle(event: EventApi): string {
-  //   console.log(event.toJSON());
-  //   if (!event.extendedProps || !event.extendedProps['keyValue']) {
-  //     return 'No title available';
-  //   }
-
-  //   const tags = event.extendedProps['keyValue'] as ILookupGetByTagNameProjectList[];
-  //   if (tags.length === 0) {
-  //     return 'No title available';
-  //   }
-
-  //   // Assuming each tag object has a `tagName` property
-  //   return tags.map(tag => tag.tagName).join(', ');
-  // }
 }
 
 

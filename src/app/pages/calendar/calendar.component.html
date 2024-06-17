@@ -68,10 +68,19 @@
         </div>
         <div style="margin-bottom: 20px"></div>
       </div>
-      <div class="p-field">
+      <!-- <div class="p-field">
         <button pButton type="button" label="Add Work" (click)="addWork()"></button>
-      </div>
+        <button *ngIf="!isEditMode" (click)="addWork()" pButton type="button" label="Add"></button>
+        <button *ngIf="isEditMode" (click)="editWork()" pButton type="button" label="Edit"></button>
+        <div style="margin-bottom: 12px"></div>
+        <button *ngIf="isEditMode" (click)="deleteWork()" pButton type="button" label="Delete"></button>
+      </div> -->
     </div>
+    <p-footer>
+      <button *ngIf="!isEditMode" (click)="addWork()" pButton type="button" label="Add"></button>
+      <button *ngIf="isEditMode" (click)="editWork()" pButton type="button" label="Edit"></button>
+      <button *ngIf="isEditMode" (click)="deleteWork()" pButton type="button" label="Delete"></button>
+    </p-footer>
   </p-dialog>
 </div>
 <!-- 

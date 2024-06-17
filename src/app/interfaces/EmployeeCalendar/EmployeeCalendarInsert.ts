@@ -1,5 +1,5 @@
 import { IDataUpdateResponse } from "../shared/data-update-response";
-import { IEmployeeCalendarDTODetail, IEmployeeCalendarDetailDTOResponse } from "./EmployeeCalendarDetail";
+import { IEmployeeCalendarDTODetail } from "./EmployeeCalendarDetail";
 
 export interface IEmployeeCalendarDTOAdd {
     "dataUpdateResponse" : IDataUpdateResponse,
