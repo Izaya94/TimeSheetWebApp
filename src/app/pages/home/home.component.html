@@ -1,28 +1,40 @@
-
-<div class="flex items-center flex-col pt-56 h-screen">
+<div class="flex flex-col items-center pt-20 min-h-screen">
     <p-toast position="bottom-center"></p-toast>
-    <div class="h-screen">
-        <h1 style="font-size: 2.25rem; text-align: center; font-weight: bold; margin-top: 2.5rem;">
-            Welcome to <span style="font-size: 3.125rem; color: hsl(158, 63%, 34%);">TimeSheet Analysis</span>
-        </h1>
-
-        <div class="flex flex-col" style="font-size: 1.875rem; align-items: center; gap: 1.25rem; justify-content: center;">
-
-            <ng-container *ngIf="userDetail; else notLoggedIn">
-                <h1 style="font-size: 1.5rem;">
-                    You are logged in as <span style="font-weight: bold; color: #000;">{{ userDetail.name }}</span>
-                </h1>
-            </ng-container>
-
-            <ng-template #notLoggedIn>
-                <h1>You are not logged in.</h1>
-                <a routerLink="/login">
-                    <button type="button" style="color: #fff; background-color: #2563EB; padding: 0.625rem 1.25rem; font-size: 0.875rem; border-radius: 0.375rem; cursor: pointer;">
-                        Login
-                    </button>
-                </a>
+    <div class="w-full">
+      <h1 class="text-center text-4xl font-bold mt-10">
+        Welcome to <span class="text-green-600 text-5xl">TimeSheet Analysis</span>
+      </h1>
+      <div class="flex flex-col items-center gap-5 mt-10">
+        <ng-container *ngIf="userDetail; else notLoggedIn">
+          <h1 class="text-xl">
+            You are logged in as <span class="font-bold text-black">{{ userDetail.name }}</span>
+          </h1>
+        </ng-container>
+        <ng-template #notLoggedIn>
+          <h1 class="text-xl">You are not logged in.</h1>
+          <a routerLink="/login">
+            <button class="bg-blue-600 text-white py-2 px-4 rounded-md">
+              Login
+            </button>
+          </a>
+        </ng-template>
+      </div>
+      <div class="flex flex-wrap gap-5 mt-10 pl-10">
+        <div *ngFor="let project of projects" class="w-80">
+          <p-card header="{{project.name}}" subheader="{{project.description}}" [style]="{ width: '100%' }">
+            <ng-template pTemplate="header">
+              <img alt="Card" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
             </ng-template>
-            <!-- <button (click)="testToast()">123123</button> -->
+            <p>{{project.description}}</p>
+            <ng-template pTemplate="footer">
+              <div class="flex gap-3 mt-1">
+                <p-button label="Details" (onClick)="handleButtonClick(project, 'Details')" class="w-full" styleClass="w-full" />
+                <p-button label="Delete" severity="secondary" (onClick)="handleButtonClick(project, 'Delete')" class="w-full" styleClass="w-full" />
+              </div>
+            </ng-template>
+          </p-card>
         </div>
+      </div>
     </div>
-</div>
+  </div>
+  

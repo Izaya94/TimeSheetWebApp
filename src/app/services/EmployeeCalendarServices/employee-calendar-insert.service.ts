@@ -22,24 +22,11 @@ export class EmployeeCalendarInsertService {
       'Authorization': `Bearer ${token}`
     });
   }
+  
   insertEmployeeCalendarData(record: any): Observable<IEmployeeCalendarDTOAdd> {
-    // const userDetail = this.authService.getUserDetail();
-    // console.log(record);
-    // if(userDetail){
-    //   const username = userDetail.email;
-    //   const dataWithUserName = {...record, username};
-    //   // console.log(username);
-    //   console.log(dataWithUserName);
+    console.log(record);
       return this.http.post<IEmployeeCalendarDTOAdd>(`${this.apiUrl}EmployeeCalendar/Add`, record, { headers: this.getAuthHeaders()});
     }
-    // else{
-    //   throw new Error('Username not found in token');
-    // }
+
   }
-
-
-  
-  // postData(data: any) {
-  //   return this.http.post(`${this.apiUrl}/your-endpoint`, data, { headers: this.getAuthHeaders() });
-  // }
 

@@ -22,8 +22,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common';
-// import { INITIAL_EVENTS, createEventId } from './event-utils';
+import { CommonModule, DatePipe } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -43,11 +42,13 @@ import {
   IEmployeeCalendarDTOAdd,
 } from '../../interfaces/EmployeeCalendar/EmployeeCalendarInsert';
 import { EmployeeCalendarInsertService } from '../../services/EmployeeCalendarServices/employee-calendar-insert.service';
-import { UserTimezoneService } from '../../services/user-timezone.service';
 import { EmployeeCalendarListService } from '../../services/EmployeeCalendarServices/employee-calendar-list.service';
 import { IEmployeeCalendarDTOList } from '../../interfaces/EmployeeCalendar/EmployeeCalendarList';
 import { EmployeeCalendarEditService } from '../../services/EmployeeCalendarServices/employee-calendar-edit.service';
 import { EmployeeCalendarDTOEdit, IEmployeeCalendarDTOEdit } from '../../interfaces/EmployeeCalendar/EmployeeCalendarUpdate';
+import { formatISO, parseISO } from 'date-fns';
+import { EmployeeCalendarDeleteService } from '../../services/EmployeeCalendarServices/employee-calendar-delete.service';
+import { EmployeeCalendarDTODelete, IEmployeeCalendarDTODelete } from '../../interfaces/EmployeeCalendar/EmployeeCalendarDelete';
 @Component({
   selector: 'app-calendar',
   standalone: true,
@@ -66,7 +67,7 @@ import { EmployeeCalendarDTOEdit, IEmployeeCalendarDTOEdit } from '../../interfa
   ],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
-  providers: [MessageService],
+  providers: [MessageService, DatePipe],
 })
 export class CalendarComponent implements OnInit, AfterViewInit {
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
@@ -82,6 +83,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   selectedDate: Date = new Date();
   description: string = '';
   employeeCalendarId: number = 0;
+  employeeCalendarIdForDelete: number = 0;
   calendarVisible = signal(true);
   isEditMode: boolean = false;
   calendarEvents: EventInput[] = [];
@@ -89,6 +91,9 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   enterHours: boolean = false;
   workHours: number = 1;
   calendarOptions: any;
+  utcCalendarDate!: string;
+  utcStartTime!: string;
+  utcEndTime!: string;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -96,15 +101,14 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     private lookupGetByTagNameWorkTypeService: LookupGetByTagNameWorkTypeService,
     private lookupGetByTagNameProjectService: LookupGetByTagNameProjectService,
     private employeeCalendarInsertService: EmployeeCalendarInsertService,
-    private timezoneService: UserTimezoneService,
     private employeeCalendarListService: EmployeeCalendarListService,
-    private employeeCalendarEditService: EmployeeCalendarEditService
+    private employeeCalendarEditService: EmployeeCalendarEditService,
+    private employeeCalendarDeleteService: EmployeeCalendarDeleteService
   ) {}
   ngOnInit() {
-    const timezone = this.timezoneService.getTimezone();
-
     this.employeeCalendarListService.getEmployeeCalendarList().subscribe(data=> {
       this.employeeCalendarWorkList = data.employeeCalendarList;
+      this.convertEmployeeCalendarTimesToLocal();
       console.log(this.employeeCalendarWorkList);
     });
 
@@ -122,13 +126,29 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       editable: true,
       selectable: true,
       displayEventTime: false,
-      events: this.employeeCalendarWorkList,
+      // timeZone: 'local',
+      // events: this.calendarEvents,
       select: this.handleDateSelect.bind(this),
       eventClick: this.handleEventClick.bind(this),
       eventsSet: this.handleEvents.bind(this),
 
     });
     
+  }
+
+  convertEmployeeCalendarTimesToLocal(): void {
+    this.employeeCalendarWorkList = this.employeeCalendarWorkList.map(item => ({
+        ...item,
+        date: this.convertUTCToLocal(item.date),
+        start: this.convertUTCToLocal(item.start),
+        end: this.convertUTCToLocal(item.end)
+    }));
+  }
+
+  convertUTCToLocal(utcDate: Date): Date {
+    // const date = new Date(utcDate + 'Z'); // Ensure UTC format
+    // return this.datePipe.transform(date, 'medium') || utcDate;
+    return new Date(utcDate + 'Z');
   }
 
   handleCalendarToggle() {
@@ -167,14 +187,19 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const calendarApi = this.calendarComponent.getApi();
-    if (this.projectTitle && this.workType && this.workStart && this.workEnd) {
-      let duration = 0;
-      let eventStart = this.workStart;
-      let eventEnd = this.workEnd;
+    let duration = 0;
+    let eventStart: Date | null = this.workStart;
+    let eventEnd: Date | null = this.workEnd;
 
+    const calendarApi = this.calendarComponent.getApi();
+    if (this.projectTitle && this.workType) {
+
+      
       if (this.enterHours) {
         duration = this.workHours;
+        eventStart = new Date(this.selectedDate);
+        eventEnd = new Date(this.selectedDate);
+        eventEnd.setMinutes(eventEnd.getMinutes() + 15);
       } else {
         duration =
           (eventEnd.getTime() - eventStart.getTime()) / (1000 * 60 * 60);
@@ -202,12 +227,21 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       });
     }
 
+    let parsedCalendarDate : string;
+    let parsedStartDate: string;
+    let parsedEndDate: string;
+  
+    parsedCalendarDate = formatISO(this.selectedDate);
+    parsedStartDate = formatISO(eventStart);
+    parsedEndDate = formatISO(eventEnd);
+
+
     const employeeCalendarDTOAdd: EmployeeCalendarDTOAdd = {
-      CalendarDate: this.selectedDate,
+      CalendarDate: parseISO(parsedCalendarDate),
       ProjectId: this.projectTitle!.keyValue,
       WorkTypeId: this.workType!.keyValue,
-      StartTime: this.workStart,
-      EndTime: this.workEnd,
+      StartTime: parseISO(parsedStartDate),
+      EndTime: parseISO(parsedEndDate),
       TotalTime: this.workHours,
       Description: this.description,
     };
@@ -222,10 +256,8 @@ export class CalendarComponent implements OnInit, AfterViewInit {
           this.employeeCalendarListService.getEmployeeCalendarList().subscribe(data => {
             this.employeeCalendarWorkList = data.employeeCalendarList.map(event => ({
               ...event,
-              startTime: this.convertUtcToLocal(event.startTime).toISOString(),
-              endTime: this.convertUtcToLocal(event.endTime).toISOString()
             }));
-            
+            this.convertEmployeeCalendarTimesToLocal();
             console.log(this.employeeCalendarWorkList);
       });
         },
@@ -242,12 +274,13 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     if (clickedEvent) {
       this.projectTitle = this.projects.find(project => project.keyValue === clickedEvent.projectId) || null;
       this.workType = this.typeofwork.find(workType => workType.keyValue === clickedEvent.workTypeId) || null;
-      this.workStart = new Date(clickedEvent.startTime);
-      this.workEnd = new Date(clickedEvent.endTime);
-      this.selectedDate = new Date(clickedEvent.startTime);
+      this.workStart = new Date(clickedEvent.start);
+      this.workEnd = new Date(clickedEvent.end);
+      this.selectedDate = new Date(clickedEvent.start);
       this.description = clickedEvent.description || '';
       this.workHours = clickedEvent.totalTime;
-      this.enterHours = !!clickedEvent.totalTime;
+      this.enterHours = false;
+      // this.enterHours = !!clickedEvent.totalTime;
       
       this.visible = true;
       this.isEditMode = true;
@@ -264,14 +297,18 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    let duration = 0;
+    let eventStart = this.workStart;
+    let eventEnd = this.workEnd;
     const calendarApi = this.calendarComponent.getApi();
-    if (this.projectTitle && this.workType && this.workStart && this.workEnd) {
-      let duration = 0;
-      let eventStart = this.workStart;
-      let eventEnd = this.workEnd;
+    if (this.projectTitle && this.workType) {
+
 
       if (this.enterHours) {
         duration = this.workHours;
+        eventStart = new Date(this.selectedDate);
+        eventEnd = new Date(this.selectedDate);
+        eventEnd.setMinutes(eventEnd.getMinutes() + 15);
       } else {
         duration =
           (eventEnd.getTime() - eventStart.getTime()) / (1000 * 60 * 60);
@@ -289,7 +326,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
-        detail: 'Work added successfully.',
+        detail: 'Work edited successfully.',
       });
     } else {
       this.messageService.add({
@@ -299,13 +336,21 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       });
     }
 
+    let parsedCalendarDate : string;
+    let parsedStartDate : string;
+    let parsedEndDate : string;
+
+    parsedCalendarDate = formatISO(this.selectedDate);
+    parsedStartDate = formatISO(this.workStart);
+    parsedEndDate = formatISO(this.workEnd);
+
     const employeeCalendarDTOEdit: EmployeeCalendarDTOEdit = {
       EmployeeCalendarId: this.employeeCalendarId,
-      CalendarDate: this.selectedDate,
+      CalendarDate: parseISO(parsedCalendarDate),
       ProjectId: this.projectTitle!.keyValue,
       WorkTypeId: this.workType!.keyValue,
-      StartTime: this.workStart,
-      EndTime: this.workEnd,
+      StartTime: parseISO(parsedStartDate),
+      EndTime: parseISO(parsedEndDate),
       TotalTime: this.workHours,
       Description: this.description,
     };
@@ -313,12 +358,13 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     console.log(employeeCalendarDTOEdit);
 
     this.employeeCalendarEditService
-      .insertEmployeeCalendarData(employeeCalendarDTOEdit)
+      .updateEmployeeCalendarData(employeeCalendarDTOEdit)
       .subscribe({
         next: (response: IEmployeeCalendarDTOEdit) => {
           console.log('Employee Calendar Edited', response);
           this.employeeCalendarListService.getEmployeeCalendarList().subscribe(data=> {
             this.employeeCalendarWorkList = data.employeeCalendarList;
+            this.convertEmployeeCalendarTimesToLocal();
             console.log(this.employeeCalendarWorkList);
           });
         },
@@ -332,6 +378,29 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   }
 
   deleteWork(){
+
+    this.visible = false;
+    const employeeCalendarDTODelete: EmployeeCalendarDTODelete = {
+      employeeCalendarId: this.employeeCalendarIdForDelete,
+    };
+    this.employeeCalendarDeleteService
+    .deleteEmployeeCalendarData(employeeCalendarDTODelete)
+    .subscribe({
+      next: (response: IEmployeeCalendarDTODelete) => {
+        console.log('Employee Calendar Deleted', response);
+        this.employeeCalendarListService.getEmployeeCalendarList().subscribe(data=> {
+          this.employeeCalendarWorkList = data.employeeCalendarList;
+          this.convertEmployeeCalendarTimesToLocal();
+          console.log(this.employeeCalendarWorkList);
+        });
+      },
+      error: (error: any) => {
+        console.log('Error', error);
+      },
+      complete: () => {
+        console.log('Request complete');
+      },
+    });
     
   }
 
@@ -354,6 +423,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     const clickedEvent = this.employeeCalendarWorkList.find(event => event.employeeCalendarId === clickInfo.event.extendedProps['employeeCalendarId']);
     this.editWorkEvent(clickedEvent);
     this.employeeCalendarId = clickInfo.event.extendedProps['employeeCalendarId'];
+    this.employeeCalendarIdForDelete = clickInfo.event.extendedProps['employeeCalendarId'];
     this.isEditMode = true;
   }
 
@@ -394,9 +464,9 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     this.typeofwork = lookupGetByTagNameWorkTypeList;
   }
 
-  convertUtcToLocal(utcDateTime: string): Date {
-    return new Date(utcDateTime); // The Date constructor converts UTC string to local time
-  }
+  // convertUtcToLocal(utcDateTime: string): Date {
+  //   return new Date(utcDateTime); // The Date constructor converts UTC string to local time
+  // }
 
   calendar() {
     this.lookupGetByTagNameProjectService

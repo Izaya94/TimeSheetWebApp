@@ -42,7 +42,7 @@ export class NavbarComponent implements OnInit{
       {
         label: 'View Profile',
         icon: 'pi pi-user',
-        routerLink: ['/account', 1]
+        routerLink: ['/account']
       },
       {
         label: 'Logout',

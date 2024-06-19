@@ -6,7 +6,7 @@ export interface IEmployeeCalendarDTOAdd {
     "employeeCalendarDetail" : IEmployeeCalendarDTODetail,
 }
 
-export interface EmployeeCalendarDTOAdd
+export interface EmployeeCalendarDTOAdd 
 {
     "CalendarDate" : Date,
     "ProjectId" : number,

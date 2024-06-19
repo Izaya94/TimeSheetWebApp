@@ -14,8 +14,8 @@ export interface IEmployeeCalendarDTOList {
     workTypeId: number;
     workType: string;
     title: string;
-    startTime: string;
-    endTime: string;
+    start: Date;
+    end: Date;
     totalTime: number;
     description: string;
 }

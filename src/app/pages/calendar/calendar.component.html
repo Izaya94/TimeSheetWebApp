@@ -1,6 +1,6 @@
 <div class="card flex justify-content-center">
   <p-toast position="top-right"></p-toast>
-  <p-dialog header="Work Timeline" [modal]="true" [(visible)]="visible" [style]="{ width: '650px', height: '615px' }"
+  <p-dialog header="Work Timeline" [modal]="true" [(visible)]="visible" [style]="{ width: '650px', height: '680px' }"
     [maximizable]="true" (onHide)="resetForm()">
     <div class="p-fluid">
       <div class="p-field">
@@ -55,13 +55,13 @@
             <div style="margin-right: 10px">
               <label for="workStart">Start Time</label>
               <div style="margin-bottom: 12px"></div>
-              <p-calendar id="workStart" [(ngModel)]="workStart" [showTime]="true" [hourFormat]="'12'" [timeOnly]="true" stepMinute="30"
+              <p-calendar id="workStart" [(ngModel)]="workStart" [showTime]="true" [hourFormat]="'12'" [timeOnly]="true" stepMinute="15"
                 [readonlyInput]="true"></p-calendar>
             </div>
             <div>
               <label for="workEnd">End Time</label>
               <div style="margin-bottom: 12px"></div>
-              <p-calendar id="workEnd" [(ngModel)]="workEnd" [showTime]="true" [hourFormat]="'12'" [timeOnly]="true" stepMinute="30"
+              <p-calendar id="workEnd" [(ngModel)]="workEnd" [showTime]="true" [hourFormat]="'12'" [timeOnly]="true" stepMinute="15"
                 [readonlyInput]="true"></p-calendar>
             </div>
           </div>
@@ -79,7 +79,7 @@
     <p-footer>
       <button *ngIf="!isEditMode" (click)="addWork()" pButton type="button" label="Add"></button>
       <button *ngIf="isEditMode" (click)="editWork()" pButton type="button" label="Edit"></button>
-      <button *ngIf="isEditMode" (click)="deleteWork()" pButton type="button" label="Delete"></button>
+      <button *ngIf="isEditMode" (click)="deleteWork()" pButton type="button" severity="danger" label="Delete"></button>
     </p-footer>
   </p-dialog>
 </div>

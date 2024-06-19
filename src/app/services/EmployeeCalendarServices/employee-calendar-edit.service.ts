@@ -21,7 +21,7 @@ export class EmployeeCalendarEditService {
       'Authorization': `Bearer ${token}`
     });
   }
-  insertEmployeeCalendarData(record: any): Observable<IEmployeeCalendarDTOEdit> {
+  updateEmployeeCalendarData(record: any): Observable<IEmployeeCalendarDTOEdit> {
 
       return this.http.post<IEmployeeCalendarDTOEdit>(`${this.apiUrl}EmployeeCalendar/Edit`, record, { headers: this.getAuthHeaders()});
     }
