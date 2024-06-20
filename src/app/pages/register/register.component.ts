@@ -18,14 +18,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { RoleService } from '../../services/role.service';
-import { Observable, map } from 'rxjs';
-import { IRole } from '../../interfaces/role';
-import { AuthService } from '../../services/auth.service';
 import { LookupGetByTagNameDesignationService } from '../../services/LookupServices/lookup-get-by-tag-name-designation.service';
 import { ILookupGetByTagNameDesignationList } from '../../interfaces/Lookup Master/Lookup-GetByTagName-Designation';
 import { EmployeeInsertService } from '../../services/EmployeeServices/employee-insert.service';
 import { EmployeeDTOAdd, IEmployeeDTOAdd } from '../../interfaces/Employee/EmployeeInsert';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-register',
@@ -48,15 +46,18 @@ import { EmployeeDTOAdd, IEmployeeDTOAdd } from '../../interfaces/Employee/Emplo
     AsyncPipe,
     CommonModule,
     DropdownModule,
+    ToastModule
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
+  providers: [MessageService]
 })
 export class RegisterComponent implements OnInit {
   constructor(
     private lookupGetByTagNameDesignationService: LookupGetByTagNameDesignationService,
 	  private changeDetector: ChangeDetectorRef,
-    private employeeInsertService: EmployeeInsertService
+    private employeeInsertService: EmployeeInsertService,
+    private messageService: MessageService,
   ) {}
 
   designation!: ILookupGetByTagNameDesignationList[] | null;
@@ -122,6 +123,12 @@ export class RegisterComponent implements OnInit {
       this.employeeInsertService.insertEmployeeData(employeeDTOAdd).subscribe({
         next:(response: IEmployeeDTOAdd) => {
           console.log('Employee added', response);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Employee Added Successfully.',
+          });
+          this.resetForm();
         },
         error: (error: any) => {
           console.log('Error', error);
@@ -132,4 +139,20 @@ export class RegisterComponent implements OnInit {
       });
     }
   }
+
+  resetForm(){
+    this.registerForm.reset();
+  }
+
+  // resetForm() {
+  //   this.fullName = null;
+  //   this.birthDate = null;
+  //   this.contactNumber = new Date();
+  //   this.homeNumber = new Date();
+  //   this.email1 = new Date();
+  //   this.email2 = 1;
+  //   this.joinDate = false;
+  //   this.designation = '';
+  // }
+
 }

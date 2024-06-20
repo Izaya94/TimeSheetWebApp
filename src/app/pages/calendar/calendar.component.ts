@@ -388,6 +388,11 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     .subscribe({
       next: (response: IEmployeeCalendarDTODelete) => {
         console.log('Employee Calendar Deleted', response);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Work Deleted successfully.',
+        });
         this.employeeCalendarListService.getEmployeeCalendarList().subscribe(data=> {
           this.employeeCalendarWorkList = data.employeeCalendarList;
           this.convertEmployeeCalendarTimesToLocal();
@@ -401,8 +406,10 @@ export class CalendarComponent implements OnInit, AfterViewInit {
         console.log('Request complete');
       },
     });
-    
+
+
   }
+    
 
   resetForm() {
     this.projectTitle = null;

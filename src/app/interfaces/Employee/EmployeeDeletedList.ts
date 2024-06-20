@@ -1,11 +1,11 @@
 import { IDataUpdateResponse } from "../shared/data-update-response";
 
-export interface IEmployeeDTOResponse{
+export interface IEmployeeDeletedListDTOResponse{
     "dataUpdateResponse": IDataUpdateResponse,
-    "employeeDeletedList ": IEmployeeDTOList
+    "employeeDeletedList ": IEmployeeDeletedDTOList
 }
 
-export interface IEmployeeDTOList{
+export interface IEmployeeDeletedDTOList{
     "EmployeeId": number,
     "EmployeeName": string,
     "BirthDate": Date,

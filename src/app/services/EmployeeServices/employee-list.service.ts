@@ -1,23 +1,21 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/internal/Observable';
-import { map } from 'rxjs';
-import { IEmployeeDTOAdd } from '../../interfaces/Employee/EmployeeInsert';
+import { IEmployeeDTOResponse } from '../../interfaces/Employee/EmployeeList';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EmployeeInsertService {
-
+export class EmployeeListService {
 
   apiUrl = environment.apiUrl;
+
   constructor(private http: HttpClient) { }
 
+  getEmployeeCalendarList = (): Observable<IEmployeeDTOResponse> => {
+      return this.http.get<IEmployeeDTOResponse>(`${this.apiUrl}Employee/List`, {headers: this.getAuthHeaders()});
 
-  insertEmployeeData(record: any): Observable<IEmployeeDTOAdd> {
-    console.log(record);
-    return this.http.post<IEmployeeDTOAdd>(`${this.apiUrl}Employee/add`, record, {headers: this.getAuthHeaders()})
   }
 
   private getAuthHeaders() {
