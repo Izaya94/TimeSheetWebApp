@@ -9,12 +9,13 @@ import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
 import { SidebarService } from '../../services/sidebar.service';
+import { TooltipModule } from 'primeng/tooltip';
 // import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, MenubarModule, CommonModule, ToastModule, RouterModule, ButtonModule],
+  imports: [RouterLink, MenubarModule, CommonModule, ToastModule, RouterModule, ButtonModule, TooltipModule],
   providers: [MessageService],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'

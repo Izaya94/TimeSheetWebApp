@@ -21,10 +21,10 @@
       </div>
       <ng-container *ngIf="userDetail;">
       <div class="flex flex-wrap gap-5 mt-10 pl-10">
-        <div *ngFor="let project of projects" class="w-80">
-          <p-card header="{{project.name}}" subheader="{{project.description}}" [style]="{ width: '100%' }">
+        <div *ngFor="let project of projects; let i = index" class="w-80">
+          <p-card header="{{project.projectName}}" subheader="{{project.description}}" [style]="{ width: '100%' }">
             <ng-template pTemplate="header">
-              <img alt="Card" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
+              <img alt="Card" [src]="getPhotoForProject(i)" class="fixed-size-img"/>
             </ng-template>
             <p>{{project.description}}</p>
             <ng-template pTemplate="footer">

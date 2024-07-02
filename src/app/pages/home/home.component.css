@@ -109,4 +109,10 @@
   .pl-10{
     padding-left: 2.5rem;
   }
+
+  .fixed-size-img {
+    width: 100%;  /* Adjust as needed */
+    height: 200px; /* Adjust as needed */
+    object-fit: cover; /* This ensures the image covers the area, cropping if necessary */
+  }
   

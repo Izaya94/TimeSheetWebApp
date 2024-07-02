@@ -6,7 +6,8 @@ import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { ProjectListServiceService } from '../../services/ProjectServices/project-list-service.service';
+import { ProjectListService } from '../../services/ProjectServices/project-list.services';
+import { ProjectDTOList } from '../../interfaces/Project/ProjectList';
 
 
 @Component({
@@ -20,31 +21,34 @@ import { ProjectListServiceService } from '../../services/ProjectServices/projec
 export class HomeComponent implements OnInit, AfterViewInit {
   userDetail: any;
   products: any[] = [];
-  projects: any[] = [];
+  projects!: ProjectDTOList[];
+  photos = [
+    '/assets/img/photo1.jpg',
+    '/assets/img/photo2.jpg',
+    '/assets/img/photo3.jpg',
+    '/assets/img/photo4.jpg',
+    '/assets/img/photo5.jpg',
+    '/assets/img/photo6.jpg',
+  ]
 
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
     private messageService: MessageService,
-    private projectService: ProjectListServiceService
+    private projectService: ProjectListService
   ) {}
 
   ngOnInit(): void {
 
     this.userDetail = this.authService.getUserDetail();
 
-    this.projectService.getProjects().subscribe(data => {
-      this.projects = data;
+    this.projectService.getProjectList().subscribe(data => {
+      this.projects = data.projectList;
     });
+  }
 
-    this.products = [
-      { id: 1, name: 'Product 1', description: 'Description for Product 1', price: 100 },
-      { id: 2, name: 'Product 2', description: 'Description for Product 2', price: 200 },
-      { id: 3, name: 'Product 3', description: 'Description for Product 3', price: 300 },
-      { id: 4, name: 'Product 4', description: 'Description for Product 4', price: 400 },
-      { id: 5, name: 'Product 5', description: 'Description for Product 5', price: 500 },
-    ];
-
+  getPhotoForProject(index: number): string {
+    return this.photos[index % this.photos.length];
   }
   
   testToast() {
