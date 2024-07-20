@@ -22,7 +22,7 @@ export class ClientContactDeleteService {
     });
   }
   
-  deleteClientContactData(record: any): Observable<IClientContactDTODelete> {
+  deleteClientContactDataaa(record: any): Observable<IClientContactDTODelete> {
       console.log(record);
       const ClientContactId = record.ClientContactId;
       console.log(ClientContactId);
